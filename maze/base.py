@@ -60,6 +60,8 @@ class BlueprintMaze(abc.ABC):
             raise ValueError(StringContainer.size_err % size)
 
         self._init_empty(size)
+        self.__width = width
+        self.__height = height
 
     def __str__(self) -> str:
         field: str
@@ -83,6 +85,9 @@ class BlueprintMaze(abc.ABC):
         x, y = coord
         return (self.__cells[x][y])
 
+    def _get_grid(self) -> list[list[cell.Cell]]:
+        return (self.__cells)
+
     def _replace_cell(
         self, coord: tuple[int, int], new: cell.Cell
     ) -> cell.Cell:
@@ -104,7 +109,7 @@ class BlueprintMaze(abc.ABC):
         return (self.__width)
 
     def get_height(self) -> int:
-        return (self.__width)
+        return (self.__height)
 
     def get_size(self) -> tuple[int, int]:
         return (self.__width, self.__height)
@@ -158,7 +163,7 @@ class BlueprintMaze(abc.ABC):
         y: int
 
         x, y = coord
-        if (not ((0 < x < width) and (0 < y < height))):
+        if (not ((0 <= x < width) and (0 <= y < height))):
             raise IndexError(
                 StringContainer.coord_err % ((width, height) + coord)
             )

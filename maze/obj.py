@@ -23,17 +23,17 @@ class Maze(blueprint.BlueprintMaze):
     maze
     """
 
-    __cells: list[list[cell.Cell]]
     __start: tuple[int, int]
     __goal: tuple[int, int]
 
     def __init__(
         self,
         size: tuple[int, int] = [2, 2],
-        empty: bool = False
+        empty: bool = False,
     ) -> None:
 
         super().__init__(size)
+		
         if (empty):
             return
 
@@ -66,7 +66,7 @@ class Maze(blueprint.BlueprintMaze):
 
         width, height = size
         for x in range(width):
-            self.__cells.append(
+            self._get_grid().append(
                 [cell.RegularCell() for y in range(height)]
             )
 
