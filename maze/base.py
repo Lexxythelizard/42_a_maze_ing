@@ -5,8 +5,11 @@
 import typing
 import abc
 import maze.cells as cell
+from maze.values.constants import Directions
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
+
+# TODO: implement get_neighbour
 
 # ---------------------------- strings ----------------------------
 
@@ -58,32 +61,40 @@ class BlueprintMaze(abc.ABC):
 
         self._init_empty(size)
 
+    def __str__(self) -> str:
+        field: str
+
+        field = ""
+        for y in range(self.__height):
+            for x in range(self.__width):
+                field += str(self.__cells[x][y])
+            field += "\n" if y + 1 < self.__height else ''
+        return (field)
+
     def _get_cell(
         self, coord: tuple[int, int]
-    ) -> typing.Any:
+    ) -> cell.Cell:
 
         x: int
         y: int
 
         self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
         x, y = coord
-        if (x >= self.__width or y >= self.__height):
-            return (None)
         return (self.__cells[x][y])
 
     def _replace_cell(
         self, coord: tuple[int, int], new: cell.Cell
-    ) -> typing.Any:
+    ) -> cell.Cell:
 
         x: int
         y: int
 
         self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
 
         if (not isinstance(new, cell.Cell)):
             raise TypeError(StringContainer.cell_err % type(new))
-        if (self._get_cell(coord) is None):
-            return (None)
 
         x, y = coord
         self.__cells[x][y] = new
@@ -152,31 +163,38 @@ class BlueprintMaze(abc.ABC):
                 StringContainer.coord_err % ((width, height) + coord)
             )
 
+    @staticmethod
+    def get_neighbour_coords(
+        coord: tuple[int, int], direction: typing.Any
+    ) -> tuple[int, int]:
+
+        steps: tuple[int, int]
+        x1: int
+        y1: int
+        x2: int
+        y2: int
+
+        steps = Directions.relative_directions.get(direction, (0, 0))
+        x1, y1 = coord
+        x2, y2 = steps
+        return ((x1 + x2, y1 + y2))
+
     @abc.abstractmethod
     def _init_empty(self, size: tuple[int, int]) -> None:
         pass
 
+    @abc.abstractmethod
+    def set_start(self, coord: tuple[int, int]) -> None:
+        pass
 
-# ++++++++++++++++++++++++++++ funcs ++++++++++++++++++++++++++++
+    @abc.abstractmethod
+    def set_goal(self, coord: tuple[int, int]) -> None:
+        pass
 
+    @abc.abstractmethod
+    def get_start(self) -> tuple[int, int]:
+        pass
 
-# ---------------------------- sniggle ----------------------------
-
-# def ...
-
-# ---------------------------- utils ----------------------------
-
-# def ...
-
-# ---------------------------- run ----------------------------
-
-
-def main() -> None:
-    pass
-
-
-# ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
-
-if __name__ == '__main__':
-
-    main()
+    @abc.abstractmethod
+    def get_goal(self) -> tuple[int, int]:
+        pass

@@ -28,9 +28,16 @@ class Directions:
 
     directions = {
         "n": 1, "north": 1,
-        "e": 2, "eastt": 2,
+        "e": 2, "east": 2,
         "s": 4, "south": 4,
         "w": 8, "west": 8
+    }
+
+    relative_directions = {
+        "n" : (0, -1), "north" : (0, -1), 1 : (0, -1),
+        "e" : (1, 0), "east" : (0, -1), 2 : (0, -1),
+        "s" : (0, 1), "south" : (0, -1), 4 : (0, -1),
+        "w" : (-1, 0), "west" : (0, -1), 8 : (0, -1)
     }
 
     @staticmethod
