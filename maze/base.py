@@ -73,6 +73,18 @@ class BlueprintMaze(abc.ABC):
             field += "\n" if y + 1 < self.__height else ''
         return (field)
 
+    @property
+    def cells(self) -> list[list[cell.Cell]]:
+        return (self.__cells)
+
+    @property
+    def width(self) -> int:
+        return (self.__width)
+
+    @property
+    def height(self) -> int:
+        return (self.__height)
+
     def _get_cell(
         self, coord: tuple[int, int]
     ) -> cell.Cell:
