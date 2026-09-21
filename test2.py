@@ -49,10 +49,37 @@ def test_relative_map() -> None:
 
 def test_relative_get_neighbours() -> None:
 
+    test: Relative
+    ctrl_1: dict[tuple[int, int], cell.Cell]
+    ctrl_2: dict[tuple[int, int], cell.Cell]
+    dom: maze.Maze
+
+    dom = maze.Maze((4, 4))
+    ctrl_1 = {
+        (2, 1): dom.cells[2][1],
+        (1, 2): dom.cells[1][2],
+        (0, 1): dom.cells[0][1],
+        (1, 0): dom.cells[1][0]
+    }
+    ctrl_2 = {
+        (2, 1): dom.cells[2][1],
+        (1, 2): dom.cells[1][2]
+    }
+    test = Relative(
+        dom=dom, coord=(1, 1)
+    )
+
     print("test get neighnours :\t\t\t", end='')
 
+    assert (test.coord == (1, 1))
+    assert (test.ftcell is False)
+    assert (test.get_neighbours() == ctrl_1)
+    assert (test.get_neighbours(restricted=True) == ctrl_1)
+    dom.cells[1][1].close_mult_walls(0b1001)
+    assert (test.get_neighbours() == ctrl_1)
+    assert (test.get_neighbours(restricted=True) == ctrl_2)
 
-    print("[under construction]")
+    print("[O.K.]")
 
 
 # ---------------------------- utils ----------------------------

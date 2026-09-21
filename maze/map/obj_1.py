@@ -5,6 +5,7 @@
 import typing
 import maze.cells as cell
 import maze.base as blueprint
+import maze.values.constants as const
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
 
@@ -77,7 +78,7 @@ class RelativeMazeMap:
                     isinstance(
                         self.__dom.cells[x][y], cell.FourtyTwoCell
                     )
-            ):
+                ):
                     self.__map[(x, y)] = 42
 
     def init_unknown(self) -> None:
@@ -105,25 +106,37 @@ class RelativeMazeMap:
         ):
             self.__ftcell = True
 
-    def get_neighbours(self) -> list[tuple[tuple[int, int], cell.Cell]]:
+    def get_neighbours(
+        self, restricted: bool = False
+    ) -> dict[tuple[int, int], cell.Cell]:
 
         coord_list: list[tuple[int, int]]
-        out = list[tuple[tuple[int, int], cell.Cell]]
+        out = dict[tuple[int, int], cell.Cell]
+        out_cpy = dict[tuple[int, int], cell.Cell]
 
-        coord_list = self.get_heighbours_coord(
+        coord_list = self.get_neighbours_coord(
             coord=self.__coord,
             maze=self.__dom
         )
-        out = list()
+        out = dict()
 
         for el in coord_list:
             x, y = el
-            out.append((el), self.__dom.cells[x][y])
+            out.update({el: self.__dom.cells[x][y]})
+
+        if (restricted):
+
+            out_cpy = dict()
+            x, y = self.__coord
+            for key, val in out.items():
+                compare = const.Directions.get_direction_by_coord(
+                    self.__coord, key
+                )
+                if (compare & int(self.__dom.cells[x][y]) == 0b0000):
+                    out_cpy.update({key: val})
+            out = out_cpy
 
         return (out)
-
-    def get_movements(self) -> list[tuple[int, int]]:
-        pass
 
     @staticmethod
     def get_neighbours_coord(
@@ -144,23 +157,34 @@ class RelativeMazeMap:
         catch: tuple[int, int]
 
         neighbours = list()
-        x1, y2 = coord
-        for direction in Directions.hierarchy:
-            x2, y2 = Directions.relative_directions(direction)
+        x1, y1 = coord
+        for direction in const.Directions.hierarchy:
+            x2, y2 = const.Directions.relative_directions[direction]
             neighbours.append((x1 + x2, y1 + y2))
 
         if (raw):
             return (neighbours)
-
         width = maze.width
         height = maze.height
         catch = (-1, -1)
         for idx, el in enumerate(neighbours):
             x_ctrl, y_ctrl = el
             if (not ((0 <= x_ctrl < width) and (0 <= y_ctrl < height))):
-                catch = neighbors.pop(idx)
+                catch = neighbours.pop(idx)
         del catch
         return (neighbours)
+
+    @staticmethod
+    def get_neighbours_directions(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> list[tuple[int, int]]:
+
+        neighbours = list()
+        x1, y1 = coord
+        for direction in const.Directions.hierarchy:
+            x2, y2 = const.Directions.relative_directions[direction]
+            neighbours.append((x1 + x2, y1 + y2))
 
     @staticmethod
     def _guard_maze_type(maze: typing.Any) -> None:
