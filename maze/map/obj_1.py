@@ -3,9 +3,11 @@
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
 import typing
+import maze.map.base as base
 import maze.cells as cell
 import maze.base as blueprint
 import maze.values.constants as const
+from maze.move.base import Orientation
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
 
@@ -23,88 +25,8 @@ class StringContainer:
 # ++++++++++++++++++++++++++++ classes ++++++++++++++++++++++++++++
 
 
-class RelativeMazeMap:
+class RelativeMazeMap(base.BlueprintRelativeMazeMap):
 
-    __map: dict[tuple[int, int], int]
-    __dom: blueprint.BlueprintMaze
-    __coord: tuple[int, int]
-    __ftcell: bool
-
-    def __init__(
-        self, dom: blueprint.BlueprintMaze, coord: tuple[int, int]
-    ) -> None:
-
-        self._guard_maze_type(dom)
-        self.__dom = dom
-
-        self.__dom._guard_coord_type(coord)
-        self.__dom._guard_coord_val(
-            coord,
-            self.__dom.width,
-            self.__dom.height
-        )
-        self.__coord = coord
-
-        self.__map = dict()
-
-        self._dim_map()
-        self.init_unknown()
-        self.init_position()
-        self.init_ftcell()
-        self.init_42()
-
-    @property
-    def map(self) -> dict[tuple[int, int], int]:
-        return (self.__map)
-
-    @property
-    def coord(self) -> tuple[int, int]:
-        return (self.__coord)
-
-    @property
-    def ftcell(self) -> bool:
-        return (self.__ftcell)
-
-    def set_coord(self, coord: tuple[int, int]) -> None:
-        self.__coord = coord
-
-    def init_position(self) -> None:
-        self.__map[self.coord] = 0
-
-    def init_42(self) -> None:
-        for x in range(self.__dom.width):
-            for y in range(self.__dom.height):
-                if (
-                    isinstance(
-                        self.__dom.cells[x][y], cell.FourtyTwoCell
-                    )
-                ):
-                    self.__map[(x, y)] = 42
-
-    def init_unknown(self) -> None:
-        for x in range(self.__dom.width):
-            for y in range(self.__dom.height):
-                self.__map[(x, y)] = 16
-
-    def _dim_map(self) -> None:
-        for x in range(self.__dom.width):
-            for y in range(self.__dom.height):
-                self.__map.update({(x, y): -1})
-
-    def init_ftcell(self) -> None:
-
-        x: int
-        y: int
-
-        x, y = self.__coord
-        self.__ftcell = False
-
-        if (
-            isinstance(
-                self.__dom.cells[x][y], cell.FourtyTwoCell
-            )
-        ):
-            self.__ftcell = True
 
     def get_neighbours(
         self, restricted: bool = False
@@ -115,24 +37,24 @@ class RelativeMazeMap:
         out_cpy = dict[tuple[int, int], cell.Cell]
 
         coord_list = self.get_neighbours_coord(
-            coord=self.__coord,
-            maze=self.__dom
+            coord=self.coord,
+            maze=self.dom
         )
         out = dict()
 
         for el in coord_list:
             x, y = el
-            out.update({el: self.__dom.cells[x][y]})
+            out.update({el: self.dom.cells[x][y]})
 
         if (restricted):
 
             out_cpy = dict()
-            x, y = self.__coord
+            x, y = self.coord
             for key, val in out.items():
                 compare = const.Directions.get_direction_by_coord(
-                    self.__coord, key
+                    self.coord, key
                 )
-                if (compare & int(self.__dom.cells[x][y]) == 0b0000):
+                if (compare & int(self.dom.cells[x][y]) == 0b0000):
                     out_cpy.update({key: val})
             out = out_cpy
 
@@ -185,8 +107,3 @@ class RelativeMazeMap:
         for direction in const.Directions.hierarchy:
             x2, y2 = const.Directions.relative_directions[direction]
             neighbours.append((x1 + x2, y1 + y2))
-
-    @staticmethod
-    def _guard_maze_type(maze: typing.Any) -> None:
-        if (not isinstance(maze, blueprint.BlueprintMaze)):
-            raise TypeError(StringContainer.maze_type_err % type(maze))

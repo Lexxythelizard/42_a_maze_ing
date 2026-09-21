@@ -26,6 +26,11 @@ class Directions:
     south = 4
     west = 8
 
+    none = 0
+    unknown = 16
+    blocked = -1
+    ft_cell = 42
+
     directions = {
         "n": 1, "north": 1,
         "e": 2, "east": 2,
