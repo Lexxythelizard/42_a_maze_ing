@@ -11,6 +11,9 @@
 
 # ---------------------------- strings ----------------------------
 
+class StringContainer:
+
+    map_key_error = "ValueError: Invalid map key! expected one of %s got %s"
 
 # ---------------------------- sniggle ----------------------------
 
@@ -56,9 +59,18 @@ class Directions:
         "east", "south", "west", "north"
     ]
 
-    @staticmethod
-    def opposit() -> None:
-        pass
+    valid_map_keys = [
+        north, east, south, west,
+        none, unknown, blocked, ft_cell
+    ]
+
+    @classmethod
+    def guard_map_key(cls, key: int) -> None:
+        if (key not in cls.valid_map_keys):
+            raise ValueError(
+                StringContainer.map_key_error %
+                (cls.valid_map_keys, key)
+            )
 
     @classmethod
     def get_direction_by_coord(
