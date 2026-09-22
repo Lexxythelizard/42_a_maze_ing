@@ -4,7 +4,7 @@
 
 import maze.cells as cell
 import maze
-from maze.map.obj_1 import RelativeMazeMap as Relative
+from maze.map.obj import RelativeMazeMap as Relative
 
 # ++++++++++++++++++++++++++++ funcs ++++++++++++++++++++++++++++
 

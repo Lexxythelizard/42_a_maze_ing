@@ -1,4 +1,4 @@
-from maze.map.obj_1 import RelativeMazeMap
+from maze.map.obj import RelativeMazeMap
 
 __version__ = "x.x.x"
 __author__ = "adamasch & lenivorb"
