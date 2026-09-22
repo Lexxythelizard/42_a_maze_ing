@@ -82,10 +82,10 @@ class MazeMap(base.BlueprintMazeMap):
     """
 
     def map_init_unknown(self) -> None:
-        for x in range(self.__dom.width):
-            for y in range(self.__dom.height):
-                self.__map.update(
-                    {(x, y): RelativeMazeMap(self.__dom, (x, y))}
+        for x in range(self.dom.width):
+            for y in range(self.dom.height):
+                self.map.update(
+                    {(x, y): RelativeMazeMap(self.dom, (x, y))}
                 )
 
     def get_relative_map(
@@ -101,7 +101,7 @@ class MazeMap(base.BlueprintMazeMap):
         return (self.map[coord])
 
     def get_relative_neighbours(
-        self, coord: tuple[int, int], restricted: bool = False
+        self, coord: tuple[int, int], restricted: bool = True
     ) -> dict[tuple[int, int], cell.Cell]:
 
         self.dom._guard_coord_type(coord)
@@ -127,3 +127,19 @@ class MazeMap(base.BlueprintMazeMap):
             self.height
         )
         print(self.map[coord])
+
+    def set_relative_map_cell(
+        self, coord_map: tuple[int, int],
+        coord_cell: tuple[int, int],
+        key: int
+    ) -> None:
+
+        self.dom._guard_coord_type(coord_map)
+        self.dom._guard_coord_val(
+            coord_map, self.width, self.height
+        )
+        self.dom._guard_coord_type(coord_cell)
+        self.dom._guard_coord_val(
+            coord_cell, self.width, self.height
+        )
+        self.map[coord_map].set_map_cell(coord_cell, key)

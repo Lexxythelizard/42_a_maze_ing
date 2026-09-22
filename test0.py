@@ -175,7 +175,7 @@ def test_multiple_regular() -> None:
 
 def main() -> None:
 
-    print("\n------------------------------------")
+    print("\n------------------------------------\n")
     test_single_42()
     test_multiple_42()
     test_single_regular()

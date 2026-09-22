@@ -125,7 +125,7 @@ def test_maze_frame() -> None:
 
 
 def main() -> None:
-    print("\n------------------------------------")
+    print("\n------------------------------------\n")
     test_maze_init()
     test_maze_dimensions()
     test_maze_cell_access()

@@ -192,3 +192,12 @@ class BlueprintMazeMap(abc.ABC):
         self, coord: tuple[int, int], restricted: bool = False
     ) -> dict[tuple[int, int], cell.Cell]:
         pass
+
+    @abc.abstractmethod
+    def set_relative_map_cell(
+        self,
+        coord_map: tuple[int, int],
+        coord_cell: tuple[int, int],
+        key: int
+    ) -> None:
+        pass
