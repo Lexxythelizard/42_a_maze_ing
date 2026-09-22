@@ -29,18 +29,18 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
 
 
     def get_neighbours(
-        self, restricted: bool = False
+        self, restricted: bool = True
     ) -> dict[tuple[int, int], cell.Cell]:
 
         coord_list: list[tuple[int, int]]
-        out = dict[tuple[int, int], cell.Cell]
-        out_cpy = dict[tuple[int, int], cell.Cell]
+        out: dict[tuple[int, int], cell.Cell]
+        out_cpy: dict[tuple[int, int], cell.Cell]
 
         coord_list = self.get_neighbours_coord(
             coord=self.coord,
             maze=self.dom
         )
-        out = dict()
+        out = {}
 
         for el in coord_list:
             x, y = el
@@ -48,7 +48,7 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
 
         if (restricted):
 
-            out_cpy = dict()
+            out_cpy = {}
             x, y = self.coord
             for key, val in out.items():
                 compare = const.Directions.get_direction_by_coord(
@@ -56,7 +56,7 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
                 )
                 if (compare & int(self.dom.cells[x][y]) == 0b0000):
                     out_cpy.update({key: val})
-            out = out_cpy
+            return (out_cpy)
 
         return (out)
 
@@ -69,4 +69,4 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
         )
         const.Directions.guard_map_key(key)
         x, y = coord
-        self.map[x][y] = key
+        self.map[(x, y)] = key

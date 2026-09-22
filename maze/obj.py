@@ -28,7 +28,7 @@ class Maze(blueprint.BlueprintMaze):
 
     def __init__(
         self,
-        size: tuple[int, int] = [2, 2],
+        size: tuple[int, int] = (2, 2),
         empty: bool = False,
     ) -> None:
 

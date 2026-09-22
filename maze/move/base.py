@@ -77,3 +77,5 @@ class Orientation(abc.ABC):
         for direction in const.Directions.hierarchy:
             x2, y2 = const.Directions.relative_directions[direction]
             neighbours.append((x1 + x2, y1 + y2))
+
+        return (neighbours)

@@ -14,11 +14,9 @@ from maze.map.obj_1 import RelativeMazeMap as Relative
 def test_relative_map() -> None:
 
     test: Relative
-    ctrl: cell.RegularCell
     dom: maze.Maze
 
     dom = maze.Maze((4, 4))
-    ctrl = dom.cells[1][1]
     test = Relative(
         dom=dom, coord=(1, 1)
     )
@@ -73,12 +71,52 @@ def test_relative_get_neighbours() -> None:
 
     assert (test.coord == (1, 1))
     assert (test.ftcell is False)
+    assert (test.get_neighbours(restricted=False) == ctrl_1)
     assert (test.get_neighbours() == ctrl_1)
-    assert (test.get_neighbours(restricted=True) == ctrl_1)
     dom.cells[1][1].close_mult_walls(0b1001)
-    assert (test.get_neighbours() == ctrl_1)
-    assert (test.get_neighbours(restricted=True) == ctrl_2)
+    assert (test.get_neighbours(restricted=False) == ctrl_1)
+    assert (test.get_neighbours() == ctrl_2)
 
+    print("[O.K.]")
+
+
+def test_set_cell() -> None:
+
+    test: Relative
+    ctrl_1: str
+    ctrl_2: str
+    dom: maze.Maze
+
+    dom = maze.Maze((4, 4))
+    test = Relative(
+        dom=dom, coord=(1, 1)
+    )
+    ctrl_1 = "ValueError: Invalid map key! expected one of "
+    ctrl_1 += "[1, 2, 4, 8, 0, 16, -1, 42] got 3"
+
+    print("test set map cell :\t\t\t", end='')
+
+    assert (test.coord == (1, 1))
+    assert (test.ftcell is False)
+    test.set_map_cell((0, 0), 2)
+    assert (test.map[(0, 0)] == 2)
+    test.set_map_cell((0, 1), 4)
+    assert (test.map[(0, 1)] == 4)
+    test.set_map_cell((1, 2), 1)
+    assert (test.map[(1, 2)] == 1)
+    test.set_map_cell((2, 1), 8)
+    assert (test.map[(2, 1)] == 8)
+    test.set_map_cell((2, 2), 42)
+    assert (test.map[(2, 2)] == 42)
+    test.set_map_cell((1, 1), 0)
+    assert (test.map[(1, 1)] == 0)
+    test.set_map_cell((3, 3), -1)
+    assert (test.map[(3, 3)] == -1)
+    try:
+        test.set_map_cell((2, 2), 3)
+    except ValueError as err:
+        ctrl_2 = str(err)
+    assert (ctrl_1 == ctrl_2)
     print("[O.K.]")
 
 
@@ -94,6 +132,7 @@ def main() -> None:
     print("\n------------------------------------")
     test_relative_map()
     test_relative_get_neighbours()
+    test_set_cell()
     print("\n------------------------------------")
 
 

@@ -53,11 +53,11 @@ def test_maze_cell_state() -> None:
     print("test maze cell state :\t\t\t\t", end='')
     test = maze.Maze((4, 4))
     assert (bool(test._get_cell((1, 1))) == False)
-    assert (test.set_visit((1, 1)) == None)
+    test.set_visit((1, 1))
     assert (bool(test._get_cell((1, 1))) == True)
     assert (test.close_wall((1, 1), 0b1000) == True)
     assert (int(test._get_cell((1, 1))) == 0b1000)
-    assert (test.set_unvisit((1, 1)) == None)
+    test.set_unvisit((1, 1))
     assert (bool(test._get_cell((1, 1))) == False)
     print("[O.K.]")
 

@@ -54,6 +54,19 @@ class BlueprintRelativeMazeMap(abc.ABC):
         self.init_ftcell()
         self.init_42()
 
+    def __str__(self) -> str:
+
+        out: str
+
+        out = ''
+        for y in range(self.__dom.height):
+            for x in range(self.__dom.width):
+                out += " "
+                out += '0' if 0 <= int(self.__map[(x, y)]) < 10 else ''
+                out += str(self.__map[(x, y)])
+            out += '\n' if ((y + 1) < self.__dom.height) else ''
+        return (out)
+
     @property
     def map(self) -> dict[tuple[int, int], int]:
         return (self.__map)
@@ -67,7 +80,7 @@ class BlueprintRelativeMazeMap(abc.ABC):
         return (self.__ftcell)
 
     @property
-    def dom(self) -> bool:
+    def dom(self) -> blueprint.BlueprintMaze:
         return (self.__dom)
 
     def set_coord(self, coord: tuple[int, int]) -> None:
