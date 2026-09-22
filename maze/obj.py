@@ -33,7 +33,7 @@ class Maze(blueprint.BlueprintMaze):
     ) -> None:
 
         super().__init__(size)
-		
+
         if (empty):
             return
 

@@ -9,6 +9,7 @@ import maze.cells as cell
 
 # ---------------------------- initialization ----------------------------
 
+
 def test_maze_init() -> None:
     test: maze.Maze
 
@@ -16,10 +17,11 @@ def test_maze_init() -> None:
     test = maze.Maze((5, 5))
     assert (test.get_width() == 5)
     assert (test.get_height() == 5)
-    #assert (len(test.cells) == 25)
     print("[O.K.]")
 
+
 # ---------------------------- dimensions ----------------------------
+
 
 def test_maze_dimensions() -> None:
     test: maze.Maze
@@ -31,7 +33,9 @@ def test_maze_dimensions() -> None:
     assert (test.get_size() == (10, 8))
     print("[O.K.]")
 
+
 # ---------------------------- cell access ----------------------------
+
 
 def test_maze_cell_access() -> None:
     test: maze.Maze
@@ -45,23 +49,27 @@ def test_maze_cell_access() -> None:
     assert (test._get_cell((1, 0)) is test._get_grid()[1][0])
     print("[O.K.]")
 
+
 # ---------------------------- cell state ----------------------------
+
 
 def test_maze_cell_state() -> None:
     test: maze.Maze
 
     print("test maze cell state :\t\t\t\t", end='')
     test = maze.Maze((4, 4))
-    assert (bool(test._get_cell((1, 1))) == False)
+    assert (bool(test._get_cell((1, 1))) is False)
     test.set_visit((1, 1))
-    assert (bool(test._get_cell((1, 1))) == True)
-    assert (test.close_wall((1, 1), 0b1000) == True)
+    assert (bool(test._get_cell((1, 1))) is True)
+    assert (test.close_wall((1, 1), 0b1000) is True)
     assert (int(test._get_cell((1, 1))) == 0b1000)
     test.set_unvisit((1, 1))
-    assert (bool(test._get_cell((1, 1))) == False)
+    assert (bool(test._get_cell((1, 1))) is False)
     print("[O.K.]")
 
+
 # ---------------------------- str checking ----------------------------
+
 
 def test_maze_str() -> None:
     test: maze.Maze
@@ -83,6 +91,7 @@ def test_maze_str() -> None:
 
 # ---------------------------- frame checking ----------------------------
 
+
 def test_maze_frame() -> None:
     test: maze.Maze
 
@@ -93,15 +102,15 @@ def test_maze_frame() -> None:
     test = maze.Maze((3, 3))
     test.close_frame()
     assert (str(test) == "913\n802\nc46")
-    assert (test.open_wall((0, 0), 0b0001) == False)
-    assert (test.open_wall((0, 0), 0b1000) == False)
-    assert (test.open_wall((2, 0), 0b0001) == False)
-    assert (test.open_wall((2, 0), 0b0010) == False)
-    assert (test.open_wall((2, 2), 0b0010) == False)
-    assert (test.open_wall((2, 2), 0b0100) == False)
-    assert (test.open_wall((0, 2), 0b0100) == False)
-    assert (test.open_wall((0, 2), 0b1000) == False)
-    assert (test.close_wall((1, 0), 0b0100) == True)
+    assert (test.open_wall((0, 0), 0b0001) is False)
+    assert (test.open_wall((0, 0), 0b1000) is False)
+    assert (test.open_wall((2, 0), 0b0001) is False)
+    assert (test.open_wall((2, 0), 0b0010) is False)
+    assert (test.open_wall((2, 2), 0b0010) is False)
+    assert (test.open_wall((2, 2), 0b0100) is False)
+    assert (test.open_wall((0, 2), 0b0100) is False)
+    assert (test.open_wall((0, 2), 0b1000) is False)
+    assert (test.close_wall((1, 0), 0b0100) is True)
     print("[O.K.]")
 
 # ---------------------------- neighbors ----------------------------
@@ -113,6 +122,7 @@ def test_maze_frame() -> None:
 # def ...
 
 # ---------------------------- run ----------------------------
+
 
 def main() -> None:
     print("\n------------------------------------")
@@ -126,6 +136,6 @@ def main() -> None:
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
 
+
 if __name__ == '__main__':
     main()
-

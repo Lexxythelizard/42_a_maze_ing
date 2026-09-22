@@ -138,3 +138,57 @@ class BlueprintRelativeMazeMap(abc.ABC):
     def _guard_maze_type(maze: typing.Any) -> None:
         if (not isinstance(maze, blueprint.BlueprintMaze)):
             raise TypeError(StringContainer.maze_type_err % type(maze))
+
+
+class BlueprintMazeMap(abc.ABC):
+
+    """
+    maze
+    """
+
+    __map: dict[tuple[int, int], BlueprintRelativeMazeMap]
+    __dom: blueprint.BlueprintMaze
+
+    def __init__(
+        self,
+        dom: blueprint.BlueprintMaze,
+        empty: bool = False
+    ) -> None:
+
+        BlueprintRelativeMazeMap._guard_maze_type(dom)
+        self.__dom = dom
+        self.__map = dict()
+
+        self.map_init_unknown()
+
+    @property
+    def map(self) -> dict[tuple[int, int], BlueprintRelativeMazeMap]:
+        return (self.__map)
+
+    @property
+    def dom(self) -> blueprint.BlueprintMaze:
+        return (self.__dom)
+
+    @property
+    def width(self) -> int:
+        return (self.__dom.width)
+
+    @property
+    def height(self) -> int:
+        return (self.__dom.height)
+
+    @abc.abstractmethod
+    def map_init_unknown(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def get_relative_map(
+        self, coord: tuple[int, int]
+    ) -> BlueprintRelativeMazeMap:
+        pass
+
+    @abc.abstractmethod
+    def get_relative_neighbours(
+        self, coord: tuple[int, int], restricted: bool = False
+    ) -> dict[tuple[int, int], cell.Cell]:
+        pass

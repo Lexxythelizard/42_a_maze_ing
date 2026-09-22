@@ -22,26 +22,15 @@ class StringContainer:
 # ++++++++++++++++++++++++++++ classes ++++++++++++++++++++++++++++
 
 
-class MazeMap:
+class MazeMap(BlueprintMazeMap):
 
     """
-    maze
+    MazeMap
     """
-
-    _map: list[list[dict]]
-    _related_maze: blueprint.Maze
-    _related_grid: list[list[cells.Cell]]
-
-    def __init__(
-        self,
-        related: blueprint.Maze,
-        empty: bool = False
-    ) -> None:
-
-        self._realted_maze = related
-        self._related_grid = None
-
-        self.map_init_unkknown()
 
     def map_init_unknown(self) -> None:
-        pass
+        for x in range(self.__dom.width):
+            for y in range(self.__dom.height):
+                self.__map.update(
+                    {(x, y): RelativeMazeMap(self.__dom, (x, y))}
+                )

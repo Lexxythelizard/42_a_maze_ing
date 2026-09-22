@@ -2,9 +2,9 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-import typing
+# import typing
 import abc
-import maze.cells as cell
+# import maze.cells as cell
 import maze.base as blueprint
 import maze.values.constants as const
 
