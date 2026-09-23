@@ -169,6 +169,30 @@ def test_meta_map() -> None:
     print("[O.K.]")
 
 
+def test_set_relative_map_cell() -> None:
+
+    test: Map
+    dom: maze.Maze
+
+    dom = maze.Maze((4, 4))
+    test = Map(dom=dom)
+
+    print("test set_relative_map_cell :\t\t", end='')
+
+    assert (test.dom == dom)
+    assert (test.map[(1, 1)].dom == dom)
+    test.set_relative_map_cell(
+        coord_map=(1, 1), coord_cell=(2, 2), key=4
+    )
+    assert (test.map[(1, 1)].map[(2, 2)] == 4)
+    assert (test.map[(1, 1)].map[(1, 1)] == 0)
+    assert (test.map[(0, 0)].map[(2, 2)] == 16)
+    assert (test.map[(0, 0)].map[(1, 1)] == 16)
+    assert (test.map[(2, 2)].map[(2, 2)] == 0)
+
+    print("[O.K.]")
+
+
 # ---------------------------- utils ----------------------------
 
 # def ...
@@ -183,6 +207,7 @@ def main() -> None:
     test_relative_get_neighbours()
     test_set_cell()
     test_meta_map()
+    test_set_relative_map_cell()
     print("\n------------------------------------")
 
 

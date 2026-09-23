@@ -112,22 +112,6 @@ class MazeMap(base.BlueprintMazeMap):
         )
         return (self.map[coord].get_neighbours(restricted))
 
-    def dev_print_relative_map(
-        self, coord: tuple[int, int]
-    ) -> None:
-
-        """
-        For development, print Realtive maze map
-        """
-
-        self.dom._guard_coord_type(coord)
-        self.dom._guard_coord_val(
-            coord,
-            self.width,
-            self.height
-        )
-        print(self.map[coord])
-
     def set_relative_map_cell(
         self, coord_map: tuple[int, int],
         coord_cell: tuple[int, int],
@@ -143,3 +127,19 @@ class MazeMap(base.BlueprintMazeMap):
             coord_cell, self.width, self.height
         )
         self.map[coord_map].set_map_cell(coord_cell, key)
+
+    def dev_print_relative_map(
+        self, coord: tuple[int, int]
+    ) -> None:
+
+        """
+        For development, print Realtive maze map
+        """
+
+        self.dom._guard_coord_type(coord)
+        self.dom._guard_coord_val(
+            coord,
+            self.width,
+            self.height
+        )
+        print(self.map[coord])
