@@ -45,6 +45,21 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
         semipermeable: bool = False
     ) -> bool:
 
+        """
+        opens wall of a cell and its matching (neighbour cell) wall
+        if no neighbour or semipermeable is allowed (True),
+        then just opens the selected cells wall.
+        if wall or matched wall is not openable: reset
+        if neighbour: wall is openable:
+        |-- if selected: wall is openable:
+        |  | --return true
+        |  else:
+        |  | -- neigbour: reset wall
+        |  | -- return False
+        else:
+        |-- return False
+        """
+
         swap: int
         neighbour: cell.Cell
         neighbour_coord: list[tuple[int, int]]
@@ -71,13 +86,6 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
 
         return (False)
 
-        # if neighbour : true
-        #     if own : true
-        #         return true
-        #     neigbour: reset: swap
-        #     return False
-        # return False
-
     def open_mult_walls(
         self,
         coord: tuple[int, int],
@@ -101,13 +109,44 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
         semipermeable: bool = False
     ) -> bool:
 
+        """
+        closes wall of a cell and its matching (neighbour cell) wall
+        if no neighbour or semipermeable is allowed (True),
+        then just close the selected cells wall.
+        if wall or matched wall is not closeable: reset
+        if neighbour: wall is closeable:
+        |-- if selected: wall is closeable:
+        |  | --return true
+        |  else:
+        |  | -- neigbour: reset wall
+        |  | -- return False
+        else:
+        |-- return False
+        """
+
+        swap: int
+        neighbour: cell.Cell
+        neighbour_coord: list[tuple[int, int]]
+
         self._guard_coord_type(coord)
         self._guard_coord_val(coord, self.get_width(), self.get_height())
+        # implement guard valid wall
 
-        if semipermeable:
+        neighbour_coord = self.get_neighbour_by_direction(
+            coord=coord, maze=self, direction=wall
+        )
+        if (semipermeable or (not neighbour_coord)):
             return (self._get_cell(coord).close_wall(wall))
 
-        # implement alt
+        neighbour = self._get_cell(neighbour_coord[0])
+        swap = int(neighbour)
+        if (neighbour.close_wall(self.get_opposite_direction(wall))):
+
+            if (self._get_cell(coord).close_wall(wall)):
+                return (True)
+
+            neighbour._set_walls(swap)
+            return (False)
         return (False)
 
     def close_mult_walls(

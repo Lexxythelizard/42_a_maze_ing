@@ -146,8 +146,65 @@ def test_maze_open_default_setting() -> None:
     test = maze.Maze((3, 3))
     assert (test.open_wall((0, 0), 0b0001) is True)
     assert (test.open_wall((1, 1), 0b0001) is True)
+    assert (int(test._get_cell((0, 0))) == 0b0000)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+    test.close_frame()
+    assert (int(test._get_cell((0, 0))) == 0b1001)
+    assert (test.open_wall((0, 0), 0b0001) is False)
+    assert (test.open_wall((0, 1), 0b0001) is True)
+    assert (test.open_wall((1, 1), 0b0001) is True)
+    assert (int(test._get_cell((0, 0))) == 0b1001)
+    assert (int(test._get_cell((0, 1))) == 0b1000)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+    test._get_cell((1, 0)).close_wall(0b0100)
+    assert (int(test._get_cell((1, 0))) == 0b0101)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+    assert (test.open_wall((1, 0), 0b0001) is False)
+    assert (test.open_wall((1, 1), 0b0001) is True)
+    assert (int(test._get_cell((1, 0))) == 0b0001)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
 
-    print("[Implement]")
+    test._get_cell((1, 0)).close_wall(0b0100)
+    test._get_cell((1, 0)).lock()
+    assert (int(test._get_cell((1, 0))) == 0b0101)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+    assert (test.open_wall((1, 0), 0b0001) is False)
+    assert (test.open_wall((1, 1), 0b0001) is False)
+    assert (int(test._get_cell((1, 0))) == 0b0101)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+
+    print("[O.K.]")
+
+
+def test_maze_close_default_setting() -> None:
+
+    test: maze.Maze
+
+    print("test maze_close_wall no semipermeable :\t\t", end='')
+    test = maze.Maze((3, 3))
+    assert (test.close_wall((1, 0), 0b0001) is True)
+    assert (int(test._get_cell((1, 0))) == 0b0001)
+    assert (int(test._get_cell((1, 1))) == 0b0000)
+    assert (test.close_wall((1, 1), 0b0001) is True)
+    assert (int(test._get_cell((1, 0))) == 0b0101)
+    assert (int(test._get_cell((1, 1))) == 0b0001)
+    test.close_frame()
+    assert (int(test._get_cell((0, 0))) == 0b1001)
+    assert (int(test._get_cell((1, 0))) == 0b0101)
+    assert (int(test._get_cell((1, 1))) == 0b0001)
+
+    assert (test.close_wall((0, 1), 0b1000) is True)
+    assert (int(test._get_cell((0, 1))) == 0b1000)
+    assert (int(test._get_cell((1, 1))) == 0b0001)
+
+    assert (test.close_wall((0, 1), 0b0010) is True)
+    assert (int(test._get_cell((0, 1))) == 0b1010)
+    assert (int(test._get_cell((1, 1))) == 0b1001)
+    assert (int(test._get_cell((0, 0))) == 0b1001)
+
+    assert (str(test) == "953\na92\nc46")
+    print("[O.K.]")
+
 
 # ---------------------------- utils ----------------------------
 
@@ -157,6 +214,7 @@ def test_maze_open_default_setting() -> None:
 
 
 def main() -> None:
+
     print("\n------------------------------------\n")
     test_maze_init()
     test_maze_dimensions()
@@ -166,6 +224,7 @@ def main() -> None:
     test_maze_frame()
     test_opposite_direction()
     test_maze_open_default_setting()
+    test_maze_close_default_setting()
     print("\n------------------------------------")
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
