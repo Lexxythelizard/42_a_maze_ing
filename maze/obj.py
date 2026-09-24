@@ -2,9 +2,10 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-# import typing
+import typing
 import maze.cells as cell
 import maze.base as blueprint
+import maze.move.base as move
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
 
@@ -17,7 +18,7 @@ import maze.base as blueprint
 # ++++++++++++++++++++++++++++ classes ++++++++++++++++++++++++++++
 
 
-class Maze(blueprint.BlueprintMaze):
+class Maze(blueprint.BlueprintMaze, move.Orientation):
 
     """
     maze
@@ -36,6 +37,94 @@ class Maze(blueprint.BlueprintMaze):
 
         if (empty):
             return
+
+    def open_wall(
+        self,
+        coord: tuple[int, int],
+        wall: typing.Any,
+        semipermeable: bool = False
+    ) -> bool:
+
+        swap: int
+        neighbour: cell.Cell
+        neighbour_coord: list[tuple[int, int]]
+
+        self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
+        # implement guard valid wall
+
+        neighbour_coord = self.get_neighbour_by_direction(
+            coord=coord, maze=self, direction=wall
+        )
+        if (semipermeable or (not neighbour_coord)):
+            return (self._get_cell(coord).open_wall(wall))
+
+        neighbour = self._get_cell(neighbour_coord[0])
+        swap = int(neighbour)
+        if (neighbour.open_wall(self.get_opposite_direction(wall))):
+
+            if (self._get_cell(coord).open_wall(wall)):
+                return (True)
+
+            neighbour._set_walls(swap)
+            return (False)
+
+        return (False)
+
+        # if neighbour : true
+        #     if own : true
+        #         return true
+        #     neigbour: reset: swap
+        #     return False
+        # return False
+
+    def open_mult_walls(
+        self,
+        coord: tuple[int, int],
+        walls: typing.Any,
+        semipermeable: bool = False
+    ) -> bool:
+
+        self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
+
+        if semipermeable:
+            return (self._get_cell(coord).open_mult_walls(walls))
+
+        # implement alt
+        return (False)
+
+    def close_wall(
+        self,
+        coord: tuple[int, int],
+        wall: typing.Any,
+        semipermeable: bool = False
+    ) -> bool:
+
+        self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
+
+        if semipermeable:
+            return (self._get_cell(coord).close_wall(wall))
+
+        # implement alt
+        return (False)
+
+    def close_mult_walls(
+        self,
+        coord: tuple[int, int],
+        walls: typing.Any,
+        semipermeable: bool = False
+    ) -> bool:
+
+        self._guard_coord_type(coord)
+        self._guard_coord_val(coord, self.get_width(), self.get_height())
+
+        if semipermeable:
+            return (self._get_cell(coord).close_mult_walls(walls))
+
+        # implement alt
+        return (False)
 
     def set_visit(self, coord: tuple[int, int]) -> None:
         self._get_cell(coord).visit()

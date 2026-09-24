@@ -5,11 +5,9 @@
 import typing
 import abc
 import maze.cells as cell
-from maze.values.constants import Directions
+# from maze.values.constants import Directions
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
-
-# TODO: implement get_neighbour
 
 # ---------------------------- strings ----------------------------
 
@@ -126,33 +124,58 @@ class BlueprintMaze(abc.ABC):
     def get_size(self) -> tuple[int, int]:
         return (self.__width, self.__height)
 
+    def validate_coord(self, coord: tuple[int, int]) -> bool:
+
+        x: int
+        y: int
+
+        if (not isinstance(coord, tuple)):
+            return (False)
+        if (len(coord) != 2):
+            return (False)
+
+        x, y = coord
+        if (not (isinstance(x, int) and isinstance(y, int))):
+            return (False)
+        if (not ((0 <= x < self.__width) and (0 <= y < self.__height))):
+            return (False)
+        return (True)
+
+    @abc.abstractmethod
     def open_wall(
-        self, coord: tuple[int, int], wall: typing.Any
+        self,
+        coord: tuple[int, int],
+        wall: typing.Any,
+        semipermeable: bool = False
     ) -> bool:
-        self._guard_coord_type(coord)
-        self._guard_coord_val(coord, self.get_width(), self.get_height())
-        return (self._get_cell(coord).open_wall(wall))
+        pass
 
+    @abc.abstractmethod
     def open_mult_walls(
-        self, coord: tuple[int, int], walls: typing.Any
+        self,
+        coord: tuple[int, int],
+        walls: typing.Any,
+        semipermeable: bool = False
     ) -> bool:
-        self._guard_coord_type(coord)
-        self._guard_coord_val(coord, self.get_width(), self.get_height())
-        return (self._get_cell(coord).open_mult_walls(walls))
+        pass
 
+    @abc.abstractmethod
     def close_wall(
-        self, coord: tuple[int, int], wall: typing.Any
+        self,
+        coord: tuple[int, int],
+        wall: typing.Any,
+        semipermeable: bool = False
     ) -> bool:
-        self._guard_coord_type(coord)
-        self._guard_coord_val(coord, self.get_width(), self.get_height())
-        return (self._get_cell(coord).close_wall(wall))
+        pass
 
+    @abc.abstractmethod
     def close_mult_walls(
-        self, coord: tuple[int, int], walls: typing.Any
+        self,
+        coord: tuple[int, int],
+        walls: typing.Any,
+        semipermeable: bool = False
     ) -> bool:
-        self._guard_coord_type(coord)
-        self._guard_coord_val(coord, self.get_width(), self.get_height())
-        return (self._get_cell(coord).close_mult_walls(walls))
+        pass
 
     @staticmethod
     def _guard_coord_type(coord: tuple[int, int]) -> None:
@@ -161,6 +184,8 @@ class BlueprintMaze(abc.ABC):
         y: int
 
         if (not isinstance(coord, tuple)):
+            raise TypeError(StringContainer.coord_type_err_0)
+        if (len(coord) != 2):
             raise TypeError(StringContainer.coord_type_err_0)
         x, y = coord
         if (not (isinstance(x, int) and isinstance(y, int))):
@@ -179,22 +204,6 @@ class BlueprintMaze(abc.ABC):
             raise IndexError(
                 StringContainer.coord_err % ((width, height) + coord)
             )
-
-    @staticmethod
-    def get_neighbour_coords(
-        coord: tuple[int, int], direction: typing.Any
-    ) -> tuple[int, int]:
-
-        steps: tuple[int, int]
-        x1: int
-        y1: int
-        x2: int
-        y2: int
-
-        steps = Directions.relative_directions.get(direction, (0, 0))
-        x1, y1 = coord
-        x2, y2 = steps
-        return ((x1 + x2, y1 + y2))
 
     @abc.abstractmethod
     def _init_empty(self, size: tuple[int, int]) -> None:

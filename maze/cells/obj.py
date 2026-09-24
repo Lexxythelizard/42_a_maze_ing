@@ -90,6 +90,7 @@ class RegularCell(Cell):
 
         super().__init__(walls)
         self.__visited = False
+        self.__constant_walls = 0b0000
 
     def __bool__(self) -> bool:
         return (self.__visited)

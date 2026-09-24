@@ -61,7 +61,7 @@ def test_maze_cell_state() -> None:
     assert (bool(test._get_cell((1, 1))) is False)
     test.set_visit((1, 1))
     assert (bool(test._get_cell((1, 1))) is True)
-    assert (test.close_wall((1, 1), 0b1000) is True)
+    assert (test.close_wall((1, 1), 0b1000, semipermeable=True) is True)
     assert (int(test._get_cell((1, 1))) == 0b1000)
     test.set_unvisit((1, 1))
     assert (bool(test._get_cell((1, 1))) is False)
@@ -81,10 +81,10 @@ def test_maze_str() -> None:
     assert (str(test) == "93\nc6")
     test = maze.Maze((3, 3))
     assert (str(test) == "000\n000\n000")
-    test.close_wall((2, 0), 0b0001)
-    test.close_wall((2, 0), 0b0010)
-    test.close_wall((0, 2), 0b0100)
-    test.close_wall((0, 2), 0b1000)
+    test.close_wall((2, 0), 0b0001, semipermeable=True)
+    test.close_wall((2, 0), 0b0010, semipermeable=True)
+    test.close_wall((0, 2), 0b0100, semipermeable=True)
+    test.close_wall((0, 2), 0b1000, semipermeable=True)
     assert (str(test) == "003\n000\nc00")
     print("[O.K.]")
 
@@ -93,6 +93,7 @@ def test_maze_str() -> None:
 
 
 def test_maze_frame() -> None:
+
     test: maze.Maze
 
     print("test maze frame :\t\t\t\t", end='')
@@ -102,20 +103,51 @@ def test_maze_frame() -> None:
     test = maze.Maze((3, 3))
     test.close_frame()
     assert (str(test) == "913\n802\nc46")
-    assert (test.open_wall((0, 0), 0b0001) is False)
-    assert (test.open_wall((0, 0), 0b1000) is False)
-    assert (test.open_wall((2, 0), 0b0001) is False)
-    assert (test.open_wall((2, 0), 0b0010) is False)
-    assert (test.open_wall((2, 2), 0b0010) is False)
-    assert (test.open_wall((2, 2), 0b0100) is False)
-    assert (test.open_wall((0, 2), 0b0100) is False)
-    assert (test.open_wall((0, 2), 0b1000) is False)
-    assert (test.close_wall((1, 0), 0b0100) is True)
+    assert (test.open_wall((0, 0), 0b0001, semipermeable=True) is False)
+    assert (test.open_wall((0, 0), 0b1000, semipermeable=True) is False)
+    assert (test.open_wall((2, 0), 0b0001, semipermeable=True) is False)
+    assert (test.open_wall((2, 0), 0b0010, semipermeable=True) is False)
+    assert (test.open_wall((2, 2), 0b0010, semipermeable=True) is False)
+    assert (test.open_wall((2, 2), 0b0100, semipermeable=True) is False)
+    assert (test.open_wall((0, 2), 0b0100, semipermeable=True) is False)
+    assert (test.open_wall((0, 2), 0b1000, semipermeable=True) is False)
+    assert (test.close_wall((1, 0), 0b0100, semipermeable=True) is True)
     print("[O.K.]")
 
-# ---------------------------- neighbors ----------------------------
 
-# follows
+def test_opposite_direction() -> None:
+
+    test: maze.Maze
+
+    print("test opposite_direction :\t\t\t", end='')
+    test = maze.Maze((3, 3))
+    assert (test.get_opposite_direction(0b1111) == 0)
+    assert (test.get_opposite_direction(0b0000) == 0)
+    assert (test.get_opposite_direction(1) == 4)
+    assert (test.get_opposite_direction(4) == 1)
+    assert (test.get_opposite_direction(2) == 8)
+    assert (test.get_opposite_direction(8) == 2)
+    assert (test.get_opposite_direction("north") == 4)
+    assert (test.get_opposite_direction("south") == 1)
+    assert (test.get_opposite_direction("east") == 8)
+    assert (test.get_opposite_direction("west") == 2)
+    assert (test.get_opposite_direction(0b0001) == 0b0100)
+    assert (test.get_opposite_direction(0b0100) == 0b0001)
+    assert (test.get_opposite_direction(0b0010) == 0b1000)
+    assert (test.get_opposite_direction(0b1000) == 0b0010)
+    print("[O.K.]")
+
+
+def test_maze_open_default_setting() -> None:
+
+    test: maze.Maze
+
+    print("test maze_open_wall no semipermeable :\t\t", end='')
+    test = maze.Maze((3, 3))
+    assert (test.open_wall((0, 0), 0b0001) is True)
+    assert (test.open_wall((1, 1), 0b0001) is True)
+
+    print("[Implement]")
 
 # ---------------------------- utils ----------------------------
 
@@ -132,6 +164,8 @@ def main() -> None:
     test_maze_cell_state()
     test_maze_str()
     test_maze_frame()
+    test_opposite_direction()
+    test_maze_open_default_setting()
     print("\n------------------------------------")
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++

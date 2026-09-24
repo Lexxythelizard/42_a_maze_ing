@@ -193,6 +193,72 @@ def test_set_relative_map_cell() -> None:
     print("[O.K.]")
 
 
+def test_get_neighbour_by_direction() -> None:
+
+    dom: maze.Maze
+
+    dom = maze.Maze((4, 4))
+    test = Map(dom=dom)
+
+    print("test get_neighbour_by_direction :\t", end='')
+
+    assert (test.dom == dom)
+    assert (test.map[(1, 1)].dom == dom)
+    test.set_relative_map_cell(
+        coord_map=(1, 1), coord_cell=(2, 2), key=4
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((1, 1), dom, 'north') ==
+        [(1, 0)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((1, 1), dom, 'south') ==
+        [(1, 2)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((1, 1), dom, 'east') ==
+        [(2, 1)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((1, 1), dom, 'west') ==
+        [(0, 1)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 3), dom, 'north') ==
+        [(3, 2)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 3), dom, 'south') ==
+        []
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 3), dom, 'west') ==
+        [(2, 3)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 3), dom, 'east') ==
+        []
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 0), dom, 'west') ==
+        [(2, 0)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 0), dom, 'east') ==
+        []
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 0), dom, 'south') ==
+        [(3, 1)]
+    )
+    assert (
+        test.map[(0, 0)].get_neighbour_by_direction((3, 0), dom, 'north') ==
+        []
+    )
+
+    print("[O.K.]")
+
+
 # ---------------------------- utils ----------------------------
 
 # def ...
@@ -208,6 +274,7 @@ def main() -> None:
     test_set_cell()
     test_meta_map()
     test_set_relative_map_cell()
+    test_get_neighbour_by_direction()
     print("\n------------------------------------")
 
 

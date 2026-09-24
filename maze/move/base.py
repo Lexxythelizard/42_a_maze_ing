@@ -2,7 +2,7 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-# import typing
+import typing
 import abc
 # import maze.cells as cell
 import maze.base as blueprint
@@ -79,3 +79,35 @@ class Orientation(abc.ABC):
             neighbours.append((x1 + x2, y1 + y2))
 
         return (neighbours)
+
+    @staticmethod
+    def get_neighbour_by_direction(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze,
+        direction: typing.Any
+    ) -> list[tuple[int, int]]:
+
+        x1: int
+        y1: int
+        x2: int
+        y2: int
+        neighbours: list[tuple[int, int]]
+        neighbour_coord: tuple[int, int]
+
+        neighbours = list()
+
+        x1, y1 = coord
+        x2, y2 = const.Directions.relative_directions[direction]
+        neighbour_coord = (x1 + x2, y1 + y2)
+        if (maze.validate_coord(neighbour_coord)):
+            neighbours.append(neighbour_coord)
+        return (neighbours)
+
+    @staticmethod
+    def get_opposite_direction(direction: typing.Any) -> int:
+
+        return (
+            const.Directions.opposite_directions.get(
+                const.Directions.directions.get(direction, 0), 0
+            )
+        )

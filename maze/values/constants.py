@@ -35,10 +35,17 @@ class Directions:
     ft_cell = 42
 
     directions = {
-        "n": 1, "north": 1,
-        "e": 2, "east": 2,
-        "s": 4, "south": 4,
-        "w": 8, "west": 8
+        "n": 1, "north": 1, 1: 1,
+        "e": 2, "east": 2, 2: 2,
+        "s": 4, "south": 4, 4: 4,
+        "w": 8, "west": 8, 8: 8
+    }
+
+    opposite_directions = {
+        "n": 4, "north": 4, 1: 4,
+        "e": 8, "east": 8, 2: 8,
+        "s": 1, "south": 1, 4: 1,
+        "w": 2, "west": 2, 8: 2
     }
 
     relative_directions = {
