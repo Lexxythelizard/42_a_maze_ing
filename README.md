@@ -80,15 +80,25 @@ AI assistance was used for:
 ### Tree
 
 ```
-a-maze-ing
-├── maze/
-│   ├── __init__.py
-│   ├── cells/
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   └── obj.py
-│   └── values/
-│       └── constants.py
+a-maze-ing/
+├── README.md
+└── maze/
+    ├── __init__.py
+    ├── base.py
+    ├── obj.py
+    ├── cells/
+    │   ├── __init__.py
+    │   ├── base.py
+    │   └── obj.py
+    ├── map/
+    │   ├── __init__.py
+    │   ├── base.py
+    │   └── obj.py
+    ├── move/
+    │   ├── __init__.py
+    │   └── base.py
+    └── values/
+        └── constants.py
 
 ```
 
@@ -99,4 +109,3 @@ a-maze-ing
 42 Berlin login: `[Your intra]`
 
 private Github:	`[Your GitHub]`
-
