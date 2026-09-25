@@ -4,7 +4,7 @@
 
 import typing
 import abc
-# import maze.cells as cell
+import maze.cells as cell
 import maze.base as blueprint
 import maze.values.constants as const
 
@@ -97,7 +97,7 @@ class Orientation(abc.ABC):
         neighbours = list()
 
         x1, y1 = coord
-        x2, y2 = const.Directions.relative_directions[direction]
+        x2, y2 = const.Dneightbour_listirections.relative_directions[direction]
         neighbour_coord = (x1 + x2, y1 + y2)
         if (maze.validate_coord(neighbour_coord)):
             neighbours.append(neighbour_coord)
@@ -111,3 +111,89 @@ class Orientation(abc.ABC):
                 const.Directions.directions.get(direction, 0), 0
             )
         )
+
+
+class BlueprintMazeRunner(abc.ABC):
+
+    """
+    The Blueprint for orientation and movement in the maze
+    """
+
+    __dom: blueprint.BlueprintMaze
+    __position: tuple[int, int]
+
+    def __init__(
+        self,
+        dom: blueprint.BlueprintMaze,
+        position: tuple[int, int] = (0, 0)
+    ) -> None:
+
+        # TODO: implement dom guard
+        # TODO: implement coord guard
+
+        self.__dom = dom
+        self.__position = position
+        self.__dom._get_cell(self.__position).visit()
+
+    @property
+    def dom(self) -> blueprint.BlueprintMaze:
+        return (self.__dom)
+
+    @property
+    def position(self) -> tuple[int, int]:
+        return (self.__position)
+
+    @property
+    def cell(self) -> cell.Cell:
+        return (self.dom._get_cell(self.__position))
+
+    def _set_position(self, coord: tuple[int, int]) -> None:
+        # TODO: implement guard
+        self.__position = coord
+
+    def is_open_east(self) -> bool:
+        return (
+            bool((int(self.cell) ^ const.Directions.east) & int(self.cell))
+        )
+
+    def is_open_south(self) -> bool:
+        return (
+            bool((int(self.cell) ^ const.Directions.south) & int(self.cell))
+        )
+
+    def is_open_west(self) -> bool:
+        return (
+            bool((int(self.cell) ^ const.Directions.west) & int(self.cell))
+        )
+
+    def is_open_north(self) -> bool:
+        return (
+            bool((int(self.cell) ^ const.Directions.north) & int(self.cell))
+        )
+
+    def is_open(self, direction: typing.Any) -> bool:
+        side: int
+
+        # TODO: implement guard
+        side = const.Directions.directions[direction]
+        return (bool((int(self.cell) ^ side) & int(self.cell)))
+
+    @abc.abstractmethod
+    def move_east(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def move_south(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def move_west(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def move_north(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def move(self, direction: typing.Any) -> bool:
+        pass
