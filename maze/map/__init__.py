@@ -7,5 +7,5 @@ __author__ = "adamasch & lenivorb"
 __all__ = [
     "__version__", "__author__",
     "RelativeMazeMap", "MazeMap",
-	"BlueprintRelativeMazeMap", "BlueprintMazeMap"
+    "BlueprintRelativeMazeMap", "BlueprintMazeMap"
 ]

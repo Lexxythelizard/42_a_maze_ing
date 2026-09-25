@@ -3,6 +3,7 @@
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
 import typing
+from typing import cast
 import abc
 import maze.cells as cell
 import maze.base as blueprint
@@ -97,7 +98,7 @@ class Orientation(abc.ABC):
         neighbours = list()
 
         x1, y1 = coord
-        x2, y2 = const.Dneightbour_listirections.relative_directions[direction]
+        x2, y2 = const.Directions.relative_directions[direction]
         neighbour_coord = (x1 + x2, y1 + y2)
         if (maze.validate_coord(neighbour_coord)):
             neighbours.append(neighbour_coord)
@@ -111,6 +112,102 @@ class Orientation(abc.ABC):
                 const.Directions.directions.get(direction, 0), 0
             )
         )
+
+    @staticmethod
+    def is_neighbour_east(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+        x: int
+        y: int
+
+        x, y = coord
+        return ((0 <= x < (maze.width - 1)) and (0 <= y < maze.height))
+
+    @staticmethod
+    def is_neighbour_north(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+        x: int
+        y: int
+
+        x, y = coord
+        return ((0 <= x < maze.width) and (1 <= y < maze.height))
+
+    @staticmethod
+    def is_neighbour_west(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+        x: int
+        y: int
+
+        x, y = coord
+        return ((1 <= x < maze.width) and (0 <= y < maze.height))
+
+    @staticmethod
+    def is_neighbour_south(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+        x: int
+        y: int
+
+        x, y = coord
+        return ((0 <= x < maze.width) and (0 <= y < (maze.height - 1)))
+
+    @staticmethod
+    def get_neighbour_coord_east(coord: tuple[int, int]) -> tuple[int, int]:
+
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        relative_direction = const.Directions.relative_directions['east']
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        return (neighbour_coord)
+
+    @staticmethod
+    def get_neighbour_coord_south(coord: tuple[int, int]) -> tuple[int, int]:
+
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        relative_direction = const.Directions.relative_directions['south']
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        return (neighbour_coord)
+
+    @staticmethod
+    def get_neighbour_coord_west(coord: tuple[int, int]) -> tuple[int, int]:
+
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        relative_direction = const.Directions.relative_directions['west']
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        return (neighbour_coord)
+
+    @staticmethod
+    def get_neighbour_coord_north(coord: tuple[int, int]) -> tuple[int, int]:
+
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        relative_direction = const.Directions.relative_directions['north']
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        return (neighbour_coord)
 
 
 class BlueprintMazeRunner(abc.ABC):
@@ -152,24 +249,16 @@ class BlueprintMazeRunner(abc.ABC):
         self.__position = coord
 
     def is_open_east(self) -> bool:
-        return (
-            bool((int(self.cell) ^ const.Directions.east) & int(self.cell))
-        )
+        return (not self.cell.east_wall)
 
     def is_open_south(self) -> bool:
-        return (
-            bool((int(self.cell) ^ const.Directions.south) & int(self.cell))
-        )
+        return (not self.cell.south_wall)
 
     def is_open_west(self) -> bool:
-        return (
-            bool((int(self.cell) ^ const.Directions.west) & int(self.cell))
-        )
+        return (not self.cell.west_wall)
 
     def is_open_north(self) -> bool:
-        return (
-            bool((int(self.cell) ^ const.Directions.north) & int(self.cell))
-        )
+        return (not self.cell.north_wall)
 
     def is_open(self, direction: typing.Any) -> bool:
         side: int
@@ -177,6 +266,10 @@ class BlueprintMazeRunner(abc.ABC):
         # TODO: implement guard
         side = const.Directions.directions[direction]
         return (bool((int(self.cell) ^ side) & int(self.cell)))
+
+    @abc.abstractmethod
+    def is_visited_east(self) -> bool:
+        pass
 
     @abc.abstractmethod
     def move_east(self) -> bool:

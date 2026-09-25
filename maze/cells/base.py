@@ -28,9 +28,13 @@ class Cell(abc.ABC):
     """
 
     __walls: int
+    __visited: bool
+    __locked: bool
 
     def __init__(self, walls: int = 0b0) -> None:
         self.__walls = walls
+        self.__visited = False
+        self.__locked = False
 
     def __int__(self) -> int:
         return (self.__walls)
@@ -43,6 +47,46 @@ class Cell(abc.ABC):
 
     def _set_walls(self, walls: int) -> None:
         self.__walls = walls
+
+    def _set_visited(self, arg: typing.Any) -> None:
+        if (arg):
+            self.__visited = True
+        else:
+            self.__visited = False
+
+    def _set_locked(self, arg: typing.Any) -> None:
+        if (arg):
+            self.__locked = True
+        else:
+            self.__locked = False
+
+    @property
+    def walls(self) -> int:
+        return (self.__walls)
+
+    @property
+    def locked(self) -> bool:
+        return (self.__locked)
+
+    @property
+    def visited(self) -> bool:
+        return (self.__visited)
+
+    @property
+    def east_wall(self) -> bool:
+        return (self.__walls & Directions.east)
+
+    @property
+    def south_wall(self) -> bool:
+        return (self.__walls & Directions.south)
+
+    @property
+    def west_wall(self) -> bool:
+        return (self.__walls & Directions.west)
+
+    @property
+    def north_wall(self) -> bool:
+        return (self.__walls & Directions.north)
 
     @abc.abstractmethod
     def close_wall(self, wall: typing.Any) -> bool:
@@ -58,6 +102,22 @@ class Cell(abc.ABC):
 
     @abc.abstractmethod
     def open_mult_walls(self, wall: typing.Any) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def visit(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def unvisit(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def lock(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def unlock(self) -> None:
         pass
 
     @staticmethod
