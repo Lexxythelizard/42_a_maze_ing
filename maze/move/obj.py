@@ -84,7 +84,7 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
         return (False)
 
     def is_visited_east(self) -> bool:
-        if (self.is_neighbour_east(coord=self.position, maze=self.dom)):
+        if (not self.is_neighbour_east(coord=self.position, maze=self.dom)):
             return (False)
 
         return (
@@ -94,7 +94,7 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
         )
 
     def is_visited_south(self) -> bool:
-        if (self.is_neighbour_south(coord=self.position, maze=self.dom)):
+        if (not self.is_neighbour_south(coord=self.position, maze=self.dom)):
             return (False)
 
         return (
@@ -104,7 +104,7 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
         )
 
     def is_visited_west(self) -> bool:
-        if (self.is_neighbour_west(coord=self.position, maze=self.dom)):
+        if (not self.is_neighbour_west(coord=self.position, maze=self.dom)):
             return (False)
 
         return (
@@ -114,7 +114,7 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
         )
 
     def is_visited_north(self) -> bool:
-        if (self.is_neighbour_north(coord=self.position, maze=self.dom)):
+        if (not self.is_neighbour_north(coord=self.position, maze=self.dom)):
             return (False)
 
         return (

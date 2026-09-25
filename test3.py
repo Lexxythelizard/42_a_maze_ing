@@ -2,7 +2,6 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-import maze.cells as cell
 import maze
 from maze.move.obj import MazeRunner as MazeRunner
 
@@ -82,7 +81,7 @@ def test_maze_runner_check_walls() -> None:
     assert (test.dom == dom)
     assert (test.cell == dom._get_cell((3, 0)))
     assert (test.position == (3, 0))
-    assert (bool(test.cell) is True)
+    assert (test.cell.visited is True)
 
     assert (test.is_open_east() is True)
     assert (test.is_open_north() is True)
@@ -140,9 +139,81 @@ def test_maze_runner_check_visited() -> None:
     assert (test.dom == dom)
     assert (test.cell == dom._get_cell((3, 0)))
     assert (test.position == (3, 0))
-    assert (bool(test.cell) is True)
+    assert (test.cell.visited is True)
 
-    print("[Implement]")
+    assert (test.is_visited_north() is False)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    dom.close_frame()
+    assert (test.is_visited_north() is False)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    assert (test.move_west() is True)
+    assert (test.position == (2, 0))
+    assert (test.is_visited_north() is False)
+    assert (test.is_visited_east() is True)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    assert (test.move_south() is True)
+    assert (test.position == (2, 1))
+    assert (test.is_visited_north() is True)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    assert (dom.close_wall((2, 1), "north") is True)
+    assert (test.position == (2, 1))
+    assert (test.is_visited_north() is True)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    dom = maze.Maze((4, 4))
+    test = MazeRunner(
+        dom=dom, position=(2, 2)
+    )
+    assert (test.cell == dom._get_cell((2, 2)))
+    assert (test.position == (2, 2))
+    assert (test.cell.visited is True)
+
+    assert (test.is_visited_north() is False)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    assert (dom.close_wall((2, 2), "east") is True)
+    assert (dom.close_wall((2, 2), "south") is True)
+    assert (dom.close_wall((2, 2), "west") is True)
+    assert (dom.close_wall((2, 2), "north") is True)
+    assert (test.is_visited_north() is False)
+    assert (test.is_visited_east() is False)
+    assert (test.is_visited_south() is False)
+    assert (test.is_visited_west() is False)
+
+    dom._get_cell((3, 2)).visit()
+    dom._get_cell((2, 3)).visit()
+    dom._get_cell((1, 2)).visit()
+    dom._get_cell((2, 1)).visit()
+    assert (test.is_visited_north() is True)
+    assert (test.is_visited_east() is True)
+    assert (test.is_visited_south() is True)
+    assert (test.is_visited_west() is True)
+
+    assert (dom.open_wall((2, 2), "east") is True)
+    assert (dom.open_wall((2, 2), "south") is True)
+    assert (dom.open_wall((2, 2), "west") is True)
+    assert (dom.open_wall((2, 2), "north") is True)
+    assert (test.is_visited_north() is True)
+    assert (test.is_visited_east() is True)
+    assert (test.is_visited_south() is True)
+    assert (test.is_visited_west() is True)
+
+    print("[O.K.]")
 
 
 def test_maze_runner_move_with_walls() -> None:
@@ -160,11 +231,9 @@ def test_maze_runner_move_with_walls() -> None:
     assert (test.dom == dom)
     assert (test.cell == dom._get_cell((3, 0)))
     assert (test.position == (3, 0))
-    assert (bool(test.cell) is True)
+    assert (test.cell.visited is True)
 
     print("[Implement]")
-
-
 
 
 # ---------------------------- utils ----------------------------

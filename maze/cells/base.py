@@ -74,19 +74,19 @@ class Cell(abc.ABC):
 
     @property
     def east_wall(self) -> bool:
-        return (self.__walls & Directions.east)
+        return (bool(self.__walls & Directions.east))
 
     @property
     def south_wall(self) -> bool:
-        return (self.__walls & Directions.south)
+        return (bool(self.__walls & Directions.south))
 
     @property
     def west_wall(self) -> bool:
-        return (self.__walls & Directions.west)
+        return (bool(self.__walls & Directions.west))
 
     @property
     def north_wall(self) -> bool:
-        return (self.__walls & Directions.north)
+        return (bool(self.__walls & Directions.north))
 
     @abc.abstractmethod
     def close_wall(self, wall: typing.Any) -> bool:
