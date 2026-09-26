@@ -38,6 +38,13 @@ class Orientation(abc.ABC):
         raw: bool = False
     ) -> list[tuple[int, int]]:
 
+        """
+        gets a list of all neighbours coords according to the hierarchy
+        defined in .maze.values.constants.Directions.hierarchy
+        by default nonexisting (cell) coords got filtered out
+        if raw=True return unfiltered list
+        """
+
         neighbours: list[tuple[int, int]]
         x1: int
         y1: int
@@ -68,25 +75,19 @@ class Orientation(abc.ABC):
         return (neighbours)
 
     @staticmethod
-    def get_neighbours_directions(
-        coord: tuple[int, int],
-        maze: blueprint.BlueprintMaze
-    ) -> list[tuple[int, int]]:
-
-        neighbours = list()
-        x1, y1 = coord
-        for direction in const.Directions.hierarchy:
-            x2, y2 = const.Directions.relative_directions[direction]
-            neighbours.append((x1 + x2, y1 + y2))
-
-        return (neighbours)
-
-    @staticmethod
     def get_neighbour_by_direction(
         coord: tuple[int, int],
         maze: blueprint.BlueprintMaze,
         direction: typing.Any
     ) -> list[tuple[int, int]]:
+
+        """
+        takes a direction and return the neighbour in [direction]
+        if neighbour exists
+        valid directions are:
+        [1, 2, 4, 8, 'n', 'e', 's', 'w', "north", "east", "south", "west"]
+        if invalid input: raise error
+        """
 
         x1: int
         y1: int
@@ -107,6 +108,14 @@ class Orientation(abc.ABC):
     @staticmethod
     def get_opposite_direction(direction: typing.Any) -> int:
 
+        """
+        takes any direction and return the power-of-two-key of its opposite
+        valid directions are:
+        [1, 2, 4, 8, 'n', 'e', 's', 'w', "north", "east", "south", "west"]
+        if invalid input: return 0
+        if valid input: return 1 / 2 / 4 / 8
+        """
+
         return (
             const.Directions.opposite_directions.get(
                 const.Directions.directions.get(direction, 0), 0
@@ -118,6 +127,12 @@ class Orientation(abc.ABC):
         coord: tuple[int, int],
         maze: blueprint.BlueprintMaze
     ) -> bool:
+
+        """
+        takes coords (x, y) and an instance of Maze
+        checks if neighbour cell/coords (x + 1, y) exists
+        """
+
         x: int
         y: int
 
@@ -125,32 +140,16 @@ class Orientation(abc.ABC):
         return ((0 <= x < (maze.width - 1)) and (0 <= y < maze.height))
 
     @staticmethod
-    def is_neighbour_north(
-        coord: tuple[int, int],
-        maze: blueprint.BlueprintMaze
-    ) -> bool:
-        x: int
-        y: int
-
-        x, y = coord
-        return ((0 <= x < maze.width) and (1 <= y < maze.height))
-
-    @staticmethod
-    def is_neighbour_west(
-        coord: tuple[int, int],
-        maze: blueprint.BlueprintMaze
-    ) -> bool:
-        x: int
-        y: int
-
-        x, y = coord
-        return ((1 <= x < maze.width) and (0 <= y < maze.height))
-
-    @staticmethod
     def is_neighbour_south(
         coord: tuple[int, int],
         maze: blueprint.BlueprintMaze
     ) -> bool:
+
+        """
+        takes coords (x, y) and an instance of Maze
+        checks if neighbour cell/coords (x, y + 1) exists
+        """
+
         x: int
         y: int
 
@@ -158,7 +157,47 @@ class Orientation(abc.ABC):
         return ((0 <= x < maze.width) and (0 <= y < (maze.height - 1)))
 
     @staticmethod
+    def is_neighbour_west(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+
+        """
+        takes coords (x, y) and an instance of Maze
+        checks if neighbour cell/coords (x - 1, y) exists
+        """
+
+        x: int
+        y: int
+
+        x, y = coord
+        return ((1 <= x < maze.width) and (0 <= y < maze.height))
+
+    @staticmethod
+    def is_neighbour_north(
+        coord: tuple[int, int],
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+
+        """
+        takes coords (x, y) and an instance of Maze
+        checks if neighbour cell/coords (x, y - 1) exists
+        """
+
+        x: int
+        y: int
+
+        x, y = coord
+        return ((0 <= x < maze.width) and (1 <= y < maze.height))
+
+    @staticmethod
     def get_neighbour_coord_east(coord: tuple[int, int]) -> tuple[int, int]:
+
+        """
+        takes coords (x, y) and returns the coords of its hypothetical
+        neighbour to the east indepentently from their existence
+        return -> (x + 1, y)
+        """
 
         relative_direction: tuple[int, int]
         neighbour_coord: tuple[int, int]
@@ -173,6 +212,12 @@ class Orientation(abc.ABC):
     @staticmethod
     def get_neighbour_coord_south(coord: tuple[int, int]) -> tuple[int, int]:
 
+        """
+        takes coords (x, y) and returns the coords of its hypothetical
+        neighbour to the south indepentently from their existence
+        return -> (x, y + 1)
+        """
+
         relative_direction: tuple[int, int]
         neighbour_coord: tuple[int, int]
 
@@ -186,6 +231,12 @@ class Orientation(abc.ABC):
     @staticmethod
     def get_neighbour_coord_west(coord: tuple[int, int]) -> tuple[int, int]:
 
+        """
+        takes coords (x, y) and returns the coords of its hypothetical
+        neighbour to the west indepentently from their existence
+        return -> (x - 1, y)
+        """
+
         relative_direction: tuple[int, int]
         neighbour_coord: tuple[int, int]
 
@@ -198,6 +249,12 @@ class Orientation(abc.ABC):
 
     @staticmethod
     def get_neighbour_coord_north(coord: tuple[int, int]) -> tuple[int, int]:
+
+        """
+        takes coords (x, y) and returns the coords of its hypothetical
+        neighbour to the north indepentently from their existence
+        return -> (x, y - 1)
+        """
 
         relative_direction: tuple[int, int]
         neighbour_coord: tuple[int, int]
@@ -249,18 +306,57 @@ class BlueprintMazeRunner(abc.ABC):
         self.__position = coord
 
     def is_open_east(self) -> bool:
+
+        """
+        Checks if wall to the east (in related cell) is open
+        indepentendly of neighbours existence
+        returns True if open False if closed
+        """
+
         return (not self.cell.east_wall)
 
     def is_open_south(self) -> bool:
+
+        """
+        Checks if wall to the south (in related cell) is open
+        indepentendly of neighbours existence
+        returns True if open False if closed
+        """
+
         return (not self.cell.south_wall)
 
     def is_open_west(self) -> bool:
+
+        """
+        Checks if wall to the west (in related cell) is open
+        indepentendly of neighbours existence
+        returns True if open False if closed
+        """
+
         return (not self.cell.west_wall)
 
     def is_open_north(self) -> bool:
+
+        """
+        Checks if wall to the north (in related cell) is open
+        indepentendly of neighbours existence
+        returns True if open False if closed
+        """
+
         return (not self.cell.north_wall)
 
     def is_open(self, direction: typing.Any) -> bool:
+
+        """
+        Checks if wall to the direction (in related cell) is open
+        indepentendly of neighbours existence
+        returns True if open False if closed
+
+        direction have to be:
+        [1, 2, 4, 8, 'n', 'e', 's', 'w', "north", "east", "south", "west"]
+        raises Error if unvalid direction: ...under construction
+        """
+
         side: int
 
         # TODO: implement guard

@@ -28,12 +28,46 @@ class StringContainer:
 class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
 
     """
-    Blueprint for Relative Maze Map
+    RelativeMazeMap is a map which keeps track of each cells coordinate and
+    how to reach them, by using the folowing keys:
+
+        - 1: north / up
+        - 2: east  / right
+        - 4: south / down
+        - 8: west  / left
+
+        - 16: unknown
+        - 0:  own cell
+        - -1: unreachable
+        - 42: (unreachable, but ok because) 42 cell
+
+    stats:
+        __dom:    the related Maze instance
+        __coord:  the own coords (x, y)
+        __map:    the map, how to reach each cell from this relative position
+                  {(x, y): key-value}
+
+    Takes related maze instance as argument.
+    readable with .dom
+    automaticly initializes a dict of coord and values {coord: key}
+        -> just containing 16: unknown, 42: FourtyTwo, 0: self keys
+           at after initialisation
     """
 
     def get_neighbours(
         self, restricted: bool = True
     ) -> dict[tuple[int, int], cell.Cell]:
+
+        """
+        returns a dict with 0 - 4 items:
+        relative neighbours {coord: Cell}
+        items are sorted in order defined in
+        .maze.values.constants.Directions.hierarchy
+
+        filters cells by default:
+        just returns reachable items (wall to that direction is open)
+        for unfiltered use restricted=False
+        """
 
         coord_list: list[tuple[int, int]]
         out: dict[tuple[int, int], cell.Cell]
@@ -64,6 +98,14 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
         return (out)
 
     def set_map_cell(self, coord: tuple[int, int], key: int) -> None:
+
+        """
+        set Value of cell in .map {coord: key}
+        raises Error if coord is invalid or non existing
+        raises Error if key is invalid
+        valid keys are: [1, 2, 4, 8, 0, -1, 16, 42]
+        """
+
         self.dom._guard_coord_type(coord)
         self.dom._guard_coord_val(
             coord,
@@ -78,10 +120,36 @@ class RelativeMazeMap(base.BlueprintRelativeMazeMap, Orientation):
 class MazeMap(base.BlueprintMazeMap):
 
     """
-    MazeMap
+    MazeMap is a map which contains as many RealativeMazeMaps
+    as the related maze contains cells.
+
+    see help(RelativeMazeMap)
+
+    stats:
+        __dom:    the related Maze instance
+        __map:    the cluster of RealtiveMazeMap instances
+                   {(x, y): RelativeMazeMap}
+
+    Takes related maze instance as argument.
+    readable with .dom
+    automaticly initializes a cluster of RealtiveMazeMap instances
+        -> just containing 16: unknown, 42: FourtyTwo, 0: self keys
+           at after initialisation
+
+    Can assign values to cells in each relative maze:
+    see: .set_relative_map_cell()
+
+    everything needs to get orchestred by using the object and its methods
     """
 
     def map_init_unknown(self) -> None:
+
+        """
+        basicly just dims a new dict {coord: RelativeMazeMap}
+        and inits avery instance of RealtivMazeMap
+        should be called automaticly by constructor
+        """
+
         for x in range(self.dom.width):
             for y in range(self.dom.height):
                 self.map.update(
@@ -91,6 +159,12 @@ class MazeMap(base.BlueprintMazeMap):
     def get_relative_map(
         self, coord: tuple[int, int]
     ) -> base.BlueprintRelativeMazeMap:
+
+        """
+        returns the RelativeMazeMap instance at coord
+        works like .map[coord] but raises customize TypeError
+        if coord is invalid
+        """
 
         self.dom._guard_coord_type(coord)
         self.dom._guard_coord_val(
@@ -103,6 +177,17 @@ class MazeMap(base.BlueprintMazeMap):
     def get_relative_neighbours(
         self, coord: tuple[int, int], restricted: bool = True
     ) -> dict[tuple[int, int], cell.Cell]:
+
+        """
+        returns a dict with 0 - 4 items:
+        relative neighbours {coord: Cell}
+        items are sorted in order defined in
+        .maze.values.constants.Directions.hierarchy
+
+        filters cells by default:
+        just returns reachable items (wall to that direction is open)
+        for unfiltered use restricted=False
+        """
 
         self.dom._guard_coord_type(coord)
         self.dom._guard_coord_val(
@@ -117,6 +202,16 @@ class MazeMap(base.BlueprintMazeMap):
         coord_cell: tuple[int, int],
         key: int
     ) -> None:
+
+        """
+        set Value of cell in .map {coord_map: .map {coord_cell: key} }
+        coord_map: coord of relativeMazeMap
+        coord_cell: coord of cell in .map of relativeMazeMap
+
+        raises Error if coord_* is invalid or non existing
+        raises Error if key is invalid
+        valid keys are: [1, 2, 4, 8, 0, -1, 16, 42]
+        """
 
         self.dom._guard_coord_type(coord_map)
         self.dom._guard_coord_val(

@@ -84,12 +84,30 @@ class BlueprintRelativeMazeMap(abc.ABC):
         return (self.__dom)
 
     def set_coord(self, coord: tuple[int, int]) -> None:
+
+        """
+        set .coord member/attribute
+        called automaticly by constructor
+        """
+
         self.__coord = coord
 
     def init_position(self) -> None:
+
+        """
+        assigns the value 0 to own cell in RelativeMap.map
+        """
+
         self.__map[self.coord] = const.Directions.none
 
     def init_42(self) -> None:
+
+        """
+        iterates through all cells in related Maze (.dom)
+        and assigns the the value 42 to them - incl to own coords
+        in RelativeMazeMap if related Cell is an instance of FourtyTwoCell
+        """
+
         for x in range(self.__dom.width):
             for y in range(self.__dom.height):
                 if (
@@ -100,11 +118,25 @@ class BlueprintRelativeMazeMap(abc.ABC):
                     self.__map[(x, y)] = const.Directions.ft_cell
 
     def init_unknown(self) -> None:
+
+        """
+        iterates through all cells in related Maze (.dom)
+        and assigns the the value 16 (unknown / ?) to all of them
+        """
+
         for x in range(self.__dom.width):
             for y in range(self.__dom.height):
                 self.__map[(x, y)] = const.Directions.unknown
 
     def _dim_map(self) -> None:
+
+        """
+        dimensioning the member/atribute .map dict {coord: key}
+        and assigns the the value -1 blocked to each of them
+        handle with care, completely (re)assigning member/atribute .map
+        should get called first by constructor
+        """
+
         for x in range(self.__dom.width):
             for y in range(self.__dom.height):
                 self.__map.update({(x, y): const.Directions.blocked})
@@ -136,6 +168,11 @@ class BlueprintRelativeMazeMap(abc.ABC):
 
     @staticmethod
     def _guard_maze_type(maze: typing.Any) -> None:
+
+        """
+        raises custumized TypeError if argument is not an instance of Maze
+        """
+
         if (not isinstance(maze, blueprint.BlueprintMaze)):
             raise TypeError(StringContainer.maze_type_err % type(maze))
 
