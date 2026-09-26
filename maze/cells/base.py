@@ -43,18 +43,36 @@ class Cell(abc.ABC):
         return (str(hex(self.__walls))[-1])
 
     def _get_walls(self) -> int:
+        """
+        Doc
+        """
         return (self.__walls)
 
     def _set_walls(self, walls: int) -> None:
+        """
+        assigns any int value to .walls
+        not guarded: don't touch
+        use .open_wall(), .close_wall() instead
+        """
         self.__walls = walls
 
     def _set_visited(self, arg: typing.Any) -> None:
+        """
+        assigns either True or False to .visited
+        depends on if arg was True or false, while arg could be anything
+        for more safety use .visit() / .unvisit()
+        """
         if (arg):
             self.__visited = True
         else:
             self.__visited = False
 
     def _set_locked(self, arg: typing.Any) -> None:
+        """
+        assigns either True or False to .lockeded
+        depends on if arg was True or false, while arg could be anything
+        for more safety use .lock() / .unlock()
+        """
         if (arg):
             self.__locked = True
         else:
@@ -123,6 +141,10 @@ class Cell(abc.ABC):
     @staticmethod
     def parse_wall_param(wall: typing.Any) -> int:
 
+        """
+        ... ToDo: source out and simplyfy...
+        """
+
         if (not isinstance(wall, (str, int))):
             raise TypeError("[spaceholder]")
 
@@ -134,6 +156,10 @@ class Cell(abc.ABC):
     @staticmethod
     def value_guard_wall(wall: int) -> None:
 
+        """
+        raises Error if Value is invalid
+        """
+
         if (wall == 0):
             return
         if (wall in Directions.directions.values()):
@@ -142,6 +168,10 @@ class Cell(abc.ABC):
 
     @staticmethod
     def parse_walls_param(walls: typing.Any) -> int:
+
+        """
+        ... ToDo: source out and simplyfy...
+        """
 
         if (isinstance(walls, int)):
             return (walls)
@@ -158,6 +188,11 @@ class Cell(abc.ABC):
 
     @staticmethod
     def value_guard_walls(wall: int) -> None:
+
+        """
+        guards value for setting multiple walls enble/disable
+        ToDo: source our
+        """
 
         if (wall < 0 or wall > 15):
             raise ValueError("[Spaceholder]")

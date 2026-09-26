@@ -83,9 +83,18 @@ class BlueprintMaze(abc.ABC):
     def height(self) -> int:
         return (self.__height)
 
+    @property
+    def size(self) -> tuple[int, int]:
+        return (self.__width, self.__height)
+
     def _get_cell(
         self, coord: tuple[int, int]
     ) -> cell.Cell:
+
+        """
+        returns a cell by its coords (x, y)
+        if coords are invalid: raises error
+        """
 
         x: int
         y: int
@@ -96,11 +105,25 @@ class BlueprintMaze(abc.ABC):
         return (self.__cells[x][y])
 
     def _get_grid(self) -> list[list[cell.Cell]]:
+        """
+        does basicly the same as .cells:
+        returns a two dimensional list of Cells
+        but was implemented earlier
+        """
         return (self.__cells)
 
     def _replace_cell(
         self, coord: tuple[int, int], new: cell.Cell
     ) -> cell.Cell:
+
+        """
+        picks any cell of the 2D list by its coordinates
+        and replaces it with new cell
+        returns new cell
+
+        if invalid coord: raises Error
+        if invalid new: raises Error
+        """
 
         x: int
         y: int
@@ -116,15 +139,35 @@ class BlueprintMaze(abc.ABC):
         return (self._get_cell(coord))
 
     def get_width(self) -> int:
+        """
+        does basicly the same as .width:
+        returns width (lenghts x axis)
+        but was implemented earlier
+        """
         return (self.__width)
 
     def get_height(self) -> int:
+        """
+        does basicly the same as .heigh:
+        returns height (length of y axis)
+        but was implemented earlier
+        """
         return (self.__height)
 
     def get_size(self) -> tuple[int, int]:
+        """
+        does basicly the same as .size:
+        returns width and height as tuple (width, height)
+        but was implemented earlier
+        """
         return (self.__width, self.__height)
 
     def validate_coord(self, coord: tuple[int, int]) -> bool:
+
+        """
+        checks if passed coords are valid:
+        returns True / False
+        """
 
         x: int
         y: int
@@ -180,6 +223,11 @@ class BlueprintMaze(abc.ABC):
     @staticmethod
     def _guard_coord_type(coord: tuple[int, int]) -> None:
 
+        """
+        raises error if coord type is invalid
+        ToDo: source out...
+        """
+
         x: int
         y: int
 
@@ -195,6 +243,11 @@ class BlueprintMaze(abc.ABC):
     def _guard_coord_val(
         coord: tuple[int, int], width: int, height: int
     ) -> None:
+
+        """
+        raises error if coords are invalid
+        ToDo: source out...
+        """
 
         x: int
         y: int
