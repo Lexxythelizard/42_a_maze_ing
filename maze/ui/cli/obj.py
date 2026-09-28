@@ -2,10 +2,10 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-import typing
+# import typing
 from maze.ui.cli.base import MazeInterface
-import maze.cells as cells
-from maze.obj import Maze
+# import maze.cells as cells
+# from maze.obj import Maze
 # from maze.values.constants import Directions
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
@@ -33,7 +33,57 @@ class StringContainer:
 class Output(MazeInterface):
 
     """
-    ...Name...here
+    Output
+        ...under construction
+
+    stats:
+
+        __dom:              related Maze
+        __frame_interface:  Utility Class see FrameInterface
+        __frame:            the concatinated frame string with specifier %s
+                            in the middle of each cell
+        __settings:         container for settings
+
+    ...
+
+    -----------------------------------------------------------------------
+
+    examples on a 4 x 4 Maze
+
+    .frame
+
+    <open and empty>                    <closed frame>
+
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '  %s     %s     %s     %s  \\n'    '| %s     %s     %s     %s |\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '  %s     %s     %s     %s  \\n'    '| %s     %s     %s     %s |\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '  %s     %s     %s     %s  \\n'    '| %s     %s     %s     %s |\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '+   + +   + +   + +   +\\n'        '+ – + + – + + – + + – +\\n'
+    '  %s     %s     %s     %s  \\n'    '| %s     %s     %s     %s |\\n'
+    '+   + +   + +   + +   +'           '+ – + + – + + – + + – +'
+
+    <all cells closed>                  <etc>
+
+    '+ – + + – + + – + + – +\\n'        ...
+    '| %s | | %s | | %s | | %s |\\n'    ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '| %s | | %s | | %s | | %s |\\n'    ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '| %s | | %s | | %s | | %s |\\n'    ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '+ – + + – + + – + + – +\\n'        ...
+    '| %s | | %s | | %s | | %s |\\n'    ...
+    '+ – + + – + + – + + – +'           ...
+
+    -----------------------------------------------------------------------
     """
+
     def sniggle(self) -> None:
         pass
