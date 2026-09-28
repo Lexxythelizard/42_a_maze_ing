@@ -112,7 +112,6 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
     def move(self, direction: typing.Any) -> bool:
 
         """
-        DOC
         Moves in [direction] if neighbour exist and wall is open
         then updates the current position and set related cell to visited
         returns True if success, else returns False
@@ -193,3 +192,23 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
                 self.get_neighbour_coord_north(self.position)
             ).visited
         )
+
+    def is_visited(self, direction: typing.Any) -> bool:
+
+        """
+        Checks if neighbout in [direction] if neighbour exist and was visited
+        if (neighbour) cell.visited is True return True else return False
+        valid direction:
+        [1, 2, 4, 8, 'n', 'e', 's', 'w', "north", "east", "south", "west"]
+        raises error if unvalid direction: ...under vonstruction
+        """
+
+        neighbour: typing.Any
+
+        if (
+            not (neighbour := self.get_neighbour_by_direction(
+                maze=self.dom, coord=self.position, direction=direction)
+            )
+        ):
+            return (False)
+        return (self.dom._get_cell(neighbour[0]).visited)

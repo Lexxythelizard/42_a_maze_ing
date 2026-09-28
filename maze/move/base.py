@@ -74,6 +74,7 @@ class Orientation(abc.ABC):
         del catch
         return (neighbours)
 
+
     @staticmethod
     def get_neighbour_by_direction(
         coord: tuple[int, int],
@@ -361,7 +362,7 @@ class BlueprintMazeRunner(abc.ABC):
 
         # TODO: implement guard
         side = const.Directions.directions[direction]
-        return (bool((int(self.cell) ^ side) & int(self.cell)))
+        return (not bool(int(self.cell) & side))
 
     @abc.abstractmethod
     def is_visited_east(self) -> bool:
