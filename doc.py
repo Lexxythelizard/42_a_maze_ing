@@ -7,6 +7,7 @@ import os
 from maze.cells import RegularCell, FourtyTwoCell
 from maze.map.obj import RelativeMazeMap, MazeMap
 from maze.move.obj import MazeRunner
+from maze.construct import ConstructionWorker
 from maze import Maze
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
@@ -28,6 +29,7 @@ class StringContainer:
     menu += "\t[4] / \"relative map\"\t: RelativeMazeMap\n"
     menu += "\t[5] / \"map\"\t\t: MazeMap\n"
     menu += "\t[6] / \"mazerunner\"\t: MazeRunner\n"
+    menu += "\t[7] / \"construct\"\t: ConstructionWorker\n"
     menu += "\t[x]\t\t\t: Exit\n\n"
     menu += "  select: "
 
@@ -49,7 +51,9 @@ class DocContainer:
         "map": MazeMap,
         '5': MazeMap,
         "mazerunner": MazeRunner,
-        '6': MazeRunner
+        '6': MazeRunner,
+        "construct": ConstructionWorker,
+        '7': ConstructionWorker
     }
 
     invalid_inp = "invalid input, valid inputs are:\n\t%s" % docs.keys()

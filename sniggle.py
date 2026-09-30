@@ -135,6 +135,183 @@ def main() -> None:
     cli_obj.set_frame_blank()
     print(cli_obj.frame % (tuple(' ') * (3 * 3)))
 
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+            main_obj.cells[x][y].unvisit()
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(0, 0))
+    stack = dict()
+    stack.update({construct_obj.position: Directions.hierarchy})
+    stack[(0, 0)] = [
+        el for el in stack[(0, 0)] if construct_obj.is_neighbour(
+            maze=main_obj, coord=construct_obj.position, direction=el
+        )
+    ]
+    print(stack)
+        # if is_neighbour_east()
+    print(
+        "test is_neighbour('east') --> %s" % construct_obj.is_neighbour(
+            maze=main_obj, coord=construct_obj.position, direction='east'
+        )
+    )
+    print(
+        "test is_neighbour('south') --> %s" % construct_obj.is_neighbour(
+            maze=main_obj, coord=construct_obj.position, direction='south'
+        )
+    )
+    print(
+        "test is_neighbour('west') --> %s" % construct_obj.is_neighbour(
+            maze=main_obj, coord=construct_obj.position, direction='west'
+        )
+    )
+    print(
+        "test is_neighbour('north') --> %s" % construct_obj.is_neighbour(
+            maze=main_obj, coord=construct_obj.position, direction='north'
+        )
+    )
+
+    print('')
+    # """
+    construct_obj._add_current_position_to_work_stack()
+    print('test position: %d, %d' % construct_obj.position)
+    print("test initialized work stack: %s" % construct_obj.work_stack)
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print('test process: %s' % construct_obj.process())
+    print('test work stack: %s' % construct_obj.work_stack)
+    print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved a little too much:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
+
+    print("\nstart over new: from cell (1, 1)\n")
+
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+            main_obj.cells[x][y].unvisit()
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(1, 1))
+    construct_obj._add_current_position_to_work_stack()
+    print('test position: %d %d' % construct_obj.position)
+    print('test work stack: %s' % construct_obj.work_stack)
+    while (construct_obj.work_stack):
+        
+        print('test process: %s' % construct_obj.process())
+        print('test work stack: %s' % construct_obj.work_stack)
+        print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
+
+    print("\nstart over new: from cell (2, 2)\n")
+
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+            main_obj.cells[x][y].unvisit()
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(2, 2))
+    construct_obj._add_current_position_to_work_stack()
+    print('test position: %d %d' % construct_obj.position)
+    print('test work stack: %s' % construct_obj.work_stack)
+    while (construct_obj.work_stack):
+        
+        print('test process: %s' % construct_obj.process())
+        print('test work stack: %s' % construct_obj.work_stack)
+        print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
+
+
+    # """
+    
     print("\n------------------------------------")
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++

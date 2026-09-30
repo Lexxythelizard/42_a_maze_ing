@@ -192,6 +192,36 @@ class Orientation(abc.ABC):
         return ((0 <= x < maze.width) and (1 <= y < maze.height))
 
     @staticmethod
+    def is_neighbour(
+        coord: tuple[int, int],
+        direction: typing.Any,
+        maze: blueprint.BlueprintMaze
+    ) -> bool:
+
+        """
+        takes coords (x, y), str or int as direction and an instance of Maze
+        checks if neighbour cell/coords (x1 + x2, y1 + y2) exists
+
+        valid directions are:
+        [1, 2, 4, 8, 'n', 'e', 's', 'w', "north", "east", "south", "west"]
+        if invalid input: return 0
+        """
+
+        x: int
+        y: int
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        # TODO: implement guard...
+        relative_direction = const.Directions.relative_directions[direction]
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        x, y = neighbour_coord
+        return ((0 <= x < maze.width) and (0 <= y < maze.height))
+
+    @staticmethod
     def get_neighbour_coord_east(coord: tuple[int, int]) -> tuple[int, int]:
 
         """
@@ -288,6 +318,13 @@ class Orientation(abc.ABC):
             tuple(map(sum, zip(coord, relative_direction)))
         )
         return (neighbour_coord)
+
+    @staticmethod
+    def get_ordererd_directions() -> list[str]:
+        """
+        returns the unfiltered direction (strings) as lsit in hieraical order
+        """
+        return (const.Directions.hierarchy)
 
 
 class BlueprintMazeRunner(abc.ABC):

@@ -219,7 +219,7 @@ class MazeDrill(abc.ABC):
 
         neighbour_coord: tuple[int, int]
 
-        neighbour_coord = self.get_neighbour_coord_east(self.position)
+        neighbour_coord = self.get_neighbour_coord(self.position, direction)
         if (self.dom.validate_coord(neighbour_coord)):
             if (self.carve_passage(direction)):
                 return (self.move(direction))

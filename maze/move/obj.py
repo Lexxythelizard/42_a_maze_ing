@@ -127,6 +127,7 @@ class MazeRunner(base.BlueprintMazeRunner, base.Orientation):
                 )[0]
             self._set_position(neighbour_coord)
             self.cell.visit()
+            return (True)
         return (False)
 
     def is_visited_east(self) -> bool:
