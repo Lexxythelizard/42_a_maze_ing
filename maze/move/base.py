@@ -267,6 +267,28 @@ class Orientation(abc.ABC):
         )
         return (neighbour_coord)
 
+    @staticmethod
+    def get_neighbour_coord(
+        coord: tuple[int, int], direction: typing.Any
+    ) -> tuple[int, int]:
+
+        """
+        takes coords (x, y) and returns the coords of its hypothetical
+        neighbour to the [direction] indepentently from their existence
+        return -> (x1 + x2, y1 + y2)
+        """
+
+        relative_direction: tuple[int, int]
+        neighbour_coord: tuple[int, int]
+
+        # TODO: implement guard...
+        relative_direction = const.Directions.relative_directions[direction]
+        neighbour_coord = cast(
+            tuple[int, int],
+            tuple(map(sum, zip(coord, relative_direction)))
+        )
+        return (neighbour_coord)
+
 
 class BlueprintMazeRunner(abc.ABC):
 

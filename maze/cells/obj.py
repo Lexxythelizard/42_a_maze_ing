@@ -161,6 +161,10 @@ class RegularCell(Cell):
 
     __constant_walls: int
 
+    @property
+    def constant_walls(self) -> int:
+        return (self.__constant_walls)
+
     def __init__(self, walls: int = 0b0) -> None:
 
         super().__init__(walls)
