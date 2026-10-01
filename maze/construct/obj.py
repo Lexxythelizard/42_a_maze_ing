@@ -62,6 +62,25 @@ class ConstructionWorker(MazeRunner, MazeDrill):
     def seed(self) -> int:
         return (self.__seed)
 
+    def shuffle_off(self) -> None:
+        """
+        turns randomness off --> boring maze ;)
+        """
+        self.__shuffle = False
+
+    def shuffle_on(self) -> None:
+        """
+        turns shuffle on --> 
+        """
+        self.__shuffle = True
+
+    def set_seed(self, seed: int) -> None:
+        """
+        sets seed value to seed
+        """
+        # TODO: Implement Guard
+        self.__seed = seed
+
     def _add_current_position_to_work_stack(self) -> int:
 
         """

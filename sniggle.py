@@ -131,6 +131,8 @@ def main() -> None:
     print("test traverse north: %s" % construct_obj.traverse_north())
     print("test position: (%d, %d)" % construct_obj.position)
 
+    # help(construct_obj)
+
     # update cli_obj and print frame
     cli_obj.set_frame_blank()
     print(cli_obj.frame % (tuple(' ') * (3 * 3)))
@@ -309,9 +311,100 @@ def main() -> None:
     cli_obj.set_frame_blank()
     print(cli_obj.frame % (tuple(' ') * (3 * 3)))
 
+    print("\nstart over new: from cell (1, 1) and randomness seed: 0\n")
+
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+            main_obj.cells[x][y].unvisit()
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(1, 1))
+    construct_obj.shuffle_on()
+    construct_obj._add_current_position_to_work_stack()
+    print('test position: %d %d' % construct_obj.position)
+    print('test work stack: %s' % construct_obj.work_stack)
+    while (construct_obj.work_stack):
+        
+        print('test process: %s' % construct_obj.process())
+        print('test work stack: %s' % construct_obj.work_stack)
+        print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
+
+    print("\nstart over new: from cell (1, 1 and randomness seed: 42\n")
+
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+            main_obj.cells[x][y].unvisit()
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(1, 1))
+    construct_obj.shuffle_on()
+    construct_obj.set_seed(42)
+    construct_obj._add_current_position_to_work_stack()
+    print('test position: %d %d' % construct_obj.position)
+    print('test work stack: %s' % construct_obj.work_stack)
+    while (construct_obj.work_stack):
+        
+        print('test process: %s' % construct_obj.process())
+        print('test work stack: %s' % construct_obj.work_stack)
+        print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved:")
+
+    # update cli_obj and print frame
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (3 * 3)))
 
     # """
     
+    print("\ntest FourtyTwo cell add\n")
+
+    main_obj = maze.Maze((9, 9))
+    main_obj.set_fourty_two()
+    main_obj.close_frame()
+
+    # update cli_obj and print frame
+    cli_obj = ui.CLIOutput(main_obj)
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (9 * 9)))
+
+    print("\ntest FourtyTwo cell with perfect algorythm\n")
+
+    main_obj = maze.Maze((9, 9))
+    main_obj.set_fourty_two()
+    main_obj.close_frame()
+
+    # close all
+    for x in range(main_obj.width):
+        for y in range(main_obj.height):
+            main_obj.cells[x][y].close_mult_walls(15)
+
+    construct_obj = ConstructionWorker(dom=main_obj, position=(1, 1))
+    construct_obj.shuffle_on()
+    construct_obj.set_seed(42)
+    construct_obj._add_current_position_to_work_stack()
+    print('starting to carve: ')
+    print('test position: %d %d' % construct_obj.position)
+    print('test work stack: %s' % construct_obj.work_stack)
+    while (construct_obj.work_stack):
+        
+        print('test process: %s' % construct_obj.process())
+        print('test work stack: %s' % construct_obj.work_stack)
+        print('test position: %d %d' % construct_obj.position)
+
+    print("maze is carved and fourty two pattern stayed :):")
+    # update cli_obj and print frame
+    cli_obj = ui.CLIOutput(main_obj)
+    cli_obj.set_frame_blank()
+    print(cli_obj.frame % (tuple(' ') * (main_obj.width * main_obj.height)))
+
     print("\n------------------------------------")
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
