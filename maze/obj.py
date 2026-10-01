@@ -6,6 +6,7 @@ import typing
 import maze.cells as cell
 import maze.base as blueprint
 import maze.move.base as move
+from maze.values.constants import FourtyTwoSymbol
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
 
@@ -346,4 +347,25 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
         ...always returns False
         """
 
-        return (False)
+        if (not FourtyTwoSymbol.fits_in(self.width, self.height)):
+            return (False)
+
+        anchor = FourtyTwoSymbol.get_start_coord(
+            self.width, self.height
+        )
+
+        for relative in FourtyTwoSymbol.relative_coords:
+            y, x = self.add_coords(anchor, relative)
+            self.cells[x][y] = cell.FourtyTwoCell()
+
+        for relative in FourtyTwoSymbol.relative_coords:
+            coord = self.add_coords(anchor, relative)
+            for direction in FourtyTwoSymbol.walls_to_close:
+                self.close_wall(coord, direction)
+            self.set_visit(coord)
+
+        for relative in FourtyTwoSymbol.relative_coords:
+            coord = self.add_coords(anchor, relative)
+            self._get_cell(coord).lock()
+
+        return (True)

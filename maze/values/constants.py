@@ -103,26 +103,34 @@ class Directions:
             )
         )
 
-# ++++++++++++++++++++++++++++ funcs ++++++++++++++++++++++++++++
 
+class FourtyTwoSymbol:
 
-# ---------------------------- sniggle ----------------------------
+    ft_width = 7
+    ft_height = 5
 
-# def ...
+    relative_coords = [
+        (0, 0), (0, 1), (0, 2),
+        (1, 2), (1, 2), (2, 2),
+        (2, 3), (2, 4),
+        (4, 0), (5, 0), (6, 0),
+        (6, 1), (6, 2), (5, 2),
+        (4, 2), (4, 3), (4, 4),
+        (5, 4), (6, 4)
+    ]
 
-# ---------------------------- utils ----------------------------
+    walls_to_close = Directions.hierarchy
 
-# def ...
+    @classmethod
+    def fits_in(cls, width: int, height: int) -> bool:
+        return ((width - cls.ft_width > 0) and (height - cls.ft_height > 0))
 
-# ---------------------------- run ----------------------------
+    @classmethod
+    def get_start_coord(cls, width: int, height: int) -> tuple[int, int]:
 
-
-def main() -> None:
-    pass
-
-
-# ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
-
-if __name__ == '__main__':
-
-    main()
+        return (
+            (
+                int((width - cls.ft_width) / 2),
+                int((height - cls.ft_height) / 2)
+            )
+        )

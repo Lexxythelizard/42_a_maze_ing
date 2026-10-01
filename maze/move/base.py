@@ -74,7 +74,6 @@ class Orientation(abc.ABC):
         del catch
         return (neighbours)
 
-
     @staticmethod
     def get_neighbour_by_direction(
         coord: tuple[int, int],
@@ -325,6 +324,18 @@ class Orientation(abc.ABC):
         returns the unfiltered direction (strings) as lsit in hieraical order
         """
         return (const.Directions.hierarchy)
+
+    @staticmethod
+    def add_coords(a: tuple[int, int], b: tuple[int, int]) -> tuple[int, int]:
+        """
+        returns the sum of (x1 + x2, y1 + y2)
+        """
+        return (
+            cast(
+                tuple[int, int],
+                tuple(map(sum, zip(a, b)))
+            )
+        )
 
 
 class BlueprintMazeRunner(abc.ABC):
