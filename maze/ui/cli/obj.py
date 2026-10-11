@@ -85,5 +85,6 @@ class Output(MazeInterface):
     -----------------------------------------------------------------------
     """
 
-    def sniggle(self) -> None:
-        pass
+    def get_blank_maze_output(self) -> None:
+        self.update_frame()
+        return(self.frame % ((' ') * (self.dom.width * self.dom.height)))
