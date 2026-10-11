@@ -377,7 +377,7 @@ def main() -> None:
 
     print("\ntest FourtyTwo cell with perfect algorythm\n")
 
-    main_obj = maze.Maze((9, 9))
+    main_obj = maze.Maze((10, 30))
     main_obj.set_fourty_two()
     main_obj.close_frame()
 
@@ -386,7 +386,7 @@ def main() -> None:
         for y in range(main_obj.height):
             main_obj.cells[x][y].close_mult_walls(15)
 
-    construct_obj = ConstructionWorker(dom=main_obj, position=(1, 1))
+    construct_obj = ConstructionWorker(dom=main_obj, position=(3, 3))
     construct_obj.shuffle_on()
     construct_obj.set_seed(42)
     construct_obj._add_current_position_to_work_stack()

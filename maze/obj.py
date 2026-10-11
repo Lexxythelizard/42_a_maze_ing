@@ -355,7 +355,7 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
         )
 
         for relative in FourtyTwoSymbol.relative_coords:
-            y, x = self.add_coords(anchor, relative)
+            x, y = self.add_coords(anchor, relative)
             self.cells[x][y] = cell.FourtyTwoCell()
 
         for relative in FourtyTwoSymbol.relative_coords:
