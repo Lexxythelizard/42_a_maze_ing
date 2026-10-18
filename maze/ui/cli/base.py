@@ -5,8 +5,9 @@
 import typing
 import abc
 import maze.cells as cells
+import maze.ui.cli.styles as style
+from maze.cells import FourtyTwoCell
 from maze.obj import Maze
-# from maze.values.constants import Directions
 
 # ++++++++++++++++++++++++++++ globals ++++++++++++++++++++++++++++
 
@@ -201,7 +202,7 @@ class FrameInterface(abc.ABC):
 
     @classmethod
     def get_row_top(
-        cls, maze: Maze, row: int, function: typing.Any = None
+        cls, maze: Maze, row: int, re_color: str = '', ft_color: str = ''
     ) -> str:
 
         """
@@ -219,14 +220,15 @@ class FrameInterface(abc.ABC):
         line = ''
         for x in range(maze.width):
             cell = maze.cells[x][row]
-            line += cls.cell_interface.get_cell_top(cell)
+            paint = ft_color if isinstance(cell, FourtyTwoCell) else re_color
+            line += cls.cell_interface.get_cell_top(cell, paint)
             line += CLIContainer.space if ((x + 1) < maze.width) else '\n'
 
         return (line)
 
     @classmethod
     def get_row_middle(
-        cls, maze: Maze, row: int, function: typing.Any = None
+        cls, maze: Maze, row: int, re_color: str = '', ft_color: str = ''
     ) -> str:
 
         """
@@ -245,14 +247,15 @@ class FrameInterface(abc.ABC):
         line = ''
         for x in range(maze.width):
             cell = maze.cells[x][row]
-            line += cls.cell_interface.get_cell_middle(cell)
+            paint = ft_color if isinstance(cell, FourtyTwoCell) else re_color
+            line += cls.cell_interface.get_cell_middle(cell, paint)
             line += CLIContainer.space if ((x + 1) < maze.width) else '\n'
 
         return (line)
 
     @classmethod
     def get_row_bottom(
-        cls, maze: Maze, row: int, function: typing.Any = None
+        cls, maze: Maze, row: int, re_color: str = '', ft_color: str = ''
     ) -> str:
 
         """
@@ -270,7 +273,8 @@ class FrameInterface(abc.ABC):
         line = ''
         for x in range(maze.width):
             cell = maze.cells[x][row]
-            line += cls.cell_interface.get_cell_bottom(cell)
+            paint = ft_color if isinstance(cell, FourtyTwoCell) else re_color
+            line += cls.cell_interface.get_cell_bottom(cell, paint)
             line += CLIContainer.space if ((x + 1) < maze.width) else ''
         if (maze.height):
             line += '\n' if ((row + 1) < maze.height) else ''
@@ -293,9 +297,43 @@ class FrameInterface(abc.ABC):
 
         frame = ''
         for y in range(maze.height):
-            frame += cls.get_row_top(maze=maze, row=y)
-            frame += cls.get_row_middle(maze=maze, row=y)
-            frame += cls.get_row_bottom(maze=maze, row=y)
+            frame += cls.get_row_top(
+                maze=maze, row=y, re_color=color, ft_color=color
+            )
+            frame += cls.get_row_middle(
+                maze=maze, row=y, re_color=color, ft_color=color
+            )
+            frame += cls.get_row_bottom(
+                maze=maze, row=y, re_color=color, ft_color=color
+            )
+
+        return (frame)
+
+    @classmethod
+    def get_frame(cls, maze: Maze, re_color: str, ft_color: str) -> str:
+
+        """
+        gets a uni-colored frame - blank by default
+        specifiers are always blank
+
+        param color:
+        ... under construction
+        ... depends on function in .get_row_*()
+        """
+
+        frame: str
+
+        frame = ''
+        for y in range(maze.height):
+            frame += cls.get_row_top(
+                maze=maze, row=y, re_color=re_color, ft_color=ft_color
+            )
+            frame += cls.get_row_middle(
+                maze=maze, row=y, re_color=re_color, ft_color=ft_color
+            )
+            frame += cls.get_row_bottom(
+                maze=maze, row=y, re_color=re_color, ft_color=ft_color
+            )
 
         return (frame)
 
@@ -328,7 +366,7 @@ class MazeInterface(abc.ABC):
         # TODO: Implementguard dom
         self.__dom = dom
         self.__frame = ''
-        self.__settings = None
+        self.__settings = style.MetaStyle()
 
     @property
     def dom(self) -> Maze:
@@ -354,6 +392,10 @@ class MazeInterface(abc.ABC):
     def size(self) -> tuple[int, int]:
         return (self.__dom.width, self.__dom.height)
 
+    @property
+    def settings(self) -> typing.Any:
+        return (self.__settings)
+
     def set_frame_blank(self) -> None:
 
         """
@@ -363,3 +405,32 @@ class MazeInterface(abc.ABC):
 
         self.__frame = \
             self.__frame_interface.get_frame_one_color(maze=self.dom)
+
+    def set_frame(self) -> None:
+
+        """
+        Sets the frame according to selected style,
+        blank frame by default
+        """
+
+        if (self.settings.name == "default"):
+            self.__frame = \
+                self.__frame_interface.get_frame_one_color(maze=self.dom)
+
+        self.__frame = \
+            self.__frame_interface.get_frame(
+                maze=self.dom,
+                re_color=self.__settings.wall.re_color,
+                ft_color=self.__settings.wall.ft_color
+            )
+
+    def set_style(self, style_name: str) -> None:
+
+        """
+        changes style by referending to string:
+        <regular color><ft color>   example: 'greenred'
+        if name does not exist: use 'default'
+        """
+
+        # TODO: implement guard
+        self.__settings = style.MetaStyle(style_name)

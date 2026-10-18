@@ -116,7 +116,7 @@ class CellStyleProto(abc.ABC):
     __re_color: str
     __ft_symbol: str
     __un_symbol: str
-    __vi_siymbol: str
+    __vi_symbol: str
     __tr_symbol: str
 
     @abc.abstractmethod
@@ -274,4 +274,4 @@ class MetaStyleProto(abc.ABC):
 
     def _set_cell(self, cell_style: CellStyleProto) -> None:
         # TODO: implement guard
-        self.__celll = cell_style
+        self.__cell = cell_style
