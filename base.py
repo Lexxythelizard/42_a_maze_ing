@@ -2,7 +2,7 @@
 
 # ++++++++++++++++++++++++++++ imports ++++++++++++++++++++++++++++
 
-# import typing
+import typing
 import abc
 # import maze.cells as cell
 # from maze.values.constants import Directions
@@ -74,7 +74,7 @@ class BlueprintMazeGen(abc.ABC):
         raise NotImplementedError(".validate not implemented yet")
         return True
 
-    def ingest(inputfile_name: str) -> None:
+    def ingest(self, inputfile_name: str) -> None:
 
         """
         DOC
@@ -109,7 +109,8 @@ class MazeGenInputValidator(abc.ABC):
     def validate_file(filename: str) -> bool:
 
         """
-        DOC
+        Checks if the file exists and if programm has permission to open it
+        returns True or False
         """
 
         try:
@@ -124,17 +125,18 @@ class MazeGenInputValidator(abc.ABC):
     def validate_format(cls, filename: str) -> bool:
 
         """
-        DOC
+        Checks for the format/norm in the config file
+        returns True or False
 
         NOTE:
         call .validate_file() before passing filename to method
         """
 
         lines: list[str]
-        param_dict: dict[str, str]
+        checked: list[str]
 
         lines = []
-        param_dict = dict()
+        checked = []
 
         lines = cls.read_lines(filename)
 
@@ -142,64 +144,53 @@ class MazeGenInputValidator(abc.ABC):
         lines = [el for el in lines if el]
         lines = [el for el in lines if el[0] != '#']
 
-        print('test 0')
         if (len(lines) < 6):
             return (False)
 
-        print('test 1')
-        # count =
+        # count '='
         for el in lines:
             if (el.count('=') != 1):
                 return (False)
 
-        print('test 2')
+        # checks if both sides of '=' contain values
         for el in lines:
             temp = el.split('=')
             if (not (temp[0] and temp[1])):
                 return (False)
 
-        print('test 3')
+        # splits at '=' and applies particular rules to right side
         for el in lines:
             temp = el.split('=')
 
-            print('test 3.a')
-            if (param_dict.get(temp[0], '')):
+            # checks if value left side is double
+            if (temp[0] in checked):
                 return (False)
 
-            print('test 3.b')
             # checks if value of WIDTH and HEIGHT was integer
             if (temp[0] == 'WIDTH' or temp[0] == 'HEIGHT'):
                 for c in temp[1]:
                     if c not in '0123456789':
                         return (False)
-                param_dict.update({temp[0]: int(temp[1])})
 
-            print('test 3.c')
+            # checks if value of ENTRY and EXIT was tuple[int, int]
             if (temp[0] == "ENTRY" or temp[0] == "EXIT"):
-                # print('test 3.c.1 %d' % temp[1].count(','))
                 if (temp[1].count(',') != 1):
                     return (False)
-                # print('test 3.c.2')
                 for c in temp[1]:
                     if (c not in "0123456789" and c != ','):
                         return (False)
-                param_dict.update({temp[0]: temp[1]})
 
-            print('test 3.d')
+            # checks if value of PERFECT was bool
             if (temp[0] == 'PERFECT'):
                 if (temp[1] not in ["True", "False"]):
                     return (False)
-                param_dict.update({temp[0]: temp[1]})
 
-            # TODO: delete thhis block
-            if (temp[0] == 'OUTPUT_FILE'):
-                param_dict.update({temp[0]: temp[1]})
+            checked.append(temp[0])
 
-        print('test 4')
         # checks if every required key was used
         for key in cls.required_keys:
             print(key)
-            if (key not in param_dict.keys()):
+            if (key not in checked):
                 return (False)
 
         return (True)
@@ -208,14 +199,17 @@ class MazeGenInputValidator(abc.ABC):
     def validate_values(cls, filename: str) -> bool:
 
         """
-        DOC
+        Parses the configfile to checks its values
+        returns True or False
 
         NOTE:
         call .validate_format() before passing filename to method
         """
 
         lines: list[str]
-        param_dict: dict[str, str]
+        param_dict: dict[str, typing.Any]
+        n: int
+        tp: tuple[int, int]
 
         lines = []
         param_dict = dict()
@@ -225,31 +219,41 @@ class MazeGenInputValidator(abc.ABC):
         for el in lines:
             temp = el.split('=')
 
+            # stores values of WIDTH and HEIGHT as int
             if (temp[0] == 'WIDTH' or temp[0] == 'HEIGHT'):
-                param_dict.update({temp[0]: int(temp[1])})
+                n = int(temp[1])
+                param_dict.update({temp[0]: n})
 
-            # TODO: if temp[0] ENTRY or EXIT temp[1] should be x, y
+            # stores values of ENTRY and EXIT as tuple[int, int]
+            elif (temp[0] == "ENTRY" or temp[0] == "EXIT"):
+                tp = (int(temp[1].split(',')[0]), int(temp[1].split(',')[1]))
+                param_dict.update({temp[0]: tp})
 
+            # stores values of PERFECT as bool
             elif (temp[0] == 'PERFECT'):
                 if (temp[1] == "True"):
                     param_dict.update({temp[0]: True})
                 else:
                     param_dict.update({temp[0]: False})
 
+            # else just stores values of ANY as str
             else:
                 param_dict.update({temp[0]: temp[1]})
 
-        if (param_dict["WIDTH"] <= 0 or param_dict["HEIGTH"] <= 0):
+        # print("test 0: %s" % param_dict)
+
+        # checks if coord of ENTRY is in frame
+        if (param_dict["WIDTH"] <= 0 or param_dict["HEIGHT"] <= 0):
             return (False)
 
-        # checks if coords of ENTRY and EXIT are in frame
-
+        # checks if coord of ENTRY is in frame
         temp_x, temp_y = param_dict["ENTRY"]
-        if (temp_x <= 0 or temp_x >= param_dict["WIDTH"]):
+        if (temp_x < 0 or temp_x >= param_dict["WIDTH"]):
             return (False)
-        if (temp_y <= 0 or temp_y >= param_dict["HEIGHT"]):
+        if (temp_y < 0 or temp_y >= param_dict["HEIGHT"]):
             return (False)
 
+        # checks if coord of EXIT is in frame
         temp_x, temp_y = param_dict["EXIT"]
         if (temp_x <= 0 or temp_x >= param_dict["WIDTH"]):
             return (False)
@@ -278,3 +282,49 @@ class MazeGenInputValidator(abc.ABC):
         ]
 
         return (lines)
+
+    @classmethod
+    def extract_param_dict(cls, filename: str) -> dict[str, typing.Any]:
+
+        """
+        returns a dict: {"WIDTH": <int>, ..., "ENTRY": (<int>, <int>), ...}
+
+        NOTE:
+        please call: .validate_format() and .validate_values() first
+        """
+
+        lines: list[str]
+        param_dict: dict[str, typing.Any]
+        n: int
+        tp: tuple[int, int]
+
+        lines = []
+        param_dict = dict()
+
+        lines = cls.read_lines(filename)
+
+        for el in lines:
+            temp = el.split('=')
+
+            # stores values of WIDTH and HEIGHT as int
+            if (temp[0] == 'WIDTH' or temp[0] == 'HEIGHT'):
+                n = int(temp[1])
+                param_dict.update({temp[0]: n})
+
+            # stores values of ENTRY and EXIT as tuple[int, int]
+            elif (temp[0] == "ENTRY" or temp[0] == "EXIT"):
+                tp = (int(temp[1].split(',')[0]), int(temp[1].split(',')[1]))
+                param_dict.update({temp[0]: tp})
+
+            # stores values of PERFECT as bool
+            elif (temp[0] == 'PERFECT'):
+                if (temp[1] == "True"):
+                    param_dict.update({temp[0]: True})
+                else:
+                    param_dict.update({temp[0]: False})
+
+            # else just stores values of ANY as str
+            else:
+                param_dict.update({temp[0]: temp[1]})
+
+        return (param_dict)

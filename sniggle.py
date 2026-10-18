@@ -377,7 +377,7 @@ def main() -> None:
 
     print("\ntest FourtyTwo cell with perfect algorythm\n")
 
-    main_obj = maze.Maze((10, 30))
+    main_obj = maze.Maze((10, 10))
     main_obj.set_fourty_two()
     main_obj.close_frame()
 
@@ -405,6 +405,14 @@ def main() -> None:
     cli_obj.set_frame_blank()
     print(cli_obj.frame % (tuple(' ') * (main_obj.width * main_obj.height)))
 
+    print('')
+    cli_obj.set_style("greenred")
+    cli_obj.set_frame()
+    print(cli_obj.frame % (tuple(' ') * (main_obj.width * main_obj.height)))
+
+    print('')
+    main_obj.set_unvisit_all()
+    print(cli_obj.get_maze_output())
     print("\n------------------------------------")
 
 # ++++++++++++++++++++++++++++ run ++++++++++++++++++++++++++++
