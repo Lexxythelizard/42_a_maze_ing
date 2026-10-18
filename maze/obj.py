@@ -254,6 +254,14 @@ class Maze(blueprint.BlueprintMaze, move.Orientation):
         """
         self._get_cell(coord).unvisit()
 
+    def set_unvisit_all(self) -> None:
+        """
+        sets all the cells to unvisit
+        """
+        for y in range(self.height):
+            for x in range(self.width):
+                self.cells[x][y].unvisit()
+
     def set_start(self, coord: tuple[int, int]) -> None:
         """
         sets coordinates for start position
